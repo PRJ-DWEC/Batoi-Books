@@ -1,0 +1,27 @@
+[
+  {
+    "idUser": 2,
+    "idModule": "ABCD",
+    "publisher": "Apunts",
+    "price": 28,
+    "pages": 76,
+    "status": "bad",
+    "soldDate": "2023-03-25"
+  },
+  {
+    "idUser": 2,
+    "idModule": "AAAA",
+    "publisher": "McGraw-Hill",
+    "price": 14.5,
+    "pages": 36,
+    "status": "bad"
+  },
+  {
+    "idUser": 6,
+    "idModule": "ABCD",
+    "publisher": "Vértice",
+    "price": 54.5,
+    "pages": 26,
+    "status": "good"
+  }
+]

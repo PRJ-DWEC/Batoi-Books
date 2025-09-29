@@ -1,0 +1,30 @@
+[
+  {
+    "userId": 2,
+    "moduleCode": "ABCD",
+    "publisher": "Apunts",
+    "price": 28,
+    "pages": 76,
+    "status": "bad",
+    "soldDate": "2023-03-25",
+    "id": 7
+  },
+  {
+    "userId": 2,
+    "moduleCode": "AAAA",
+    "publisher": "McGraw-Hill",
+    "price": 14.5,
+    "pages": 36,
+    "status": "bad",
+    "id": 1
+  },
+  {
+    "userId": 6,
+    "moduleCode": "ABCD",
+    "publisher": "Vértice",
+    "price": 54.57,
+    "pages": 26,
+    "status": "good",
+    "id": 3
+  }
+]
