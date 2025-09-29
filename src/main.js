@@ -1,11 +1,13 @@
-
+import  data  from './services/datos.js';
+import * as f from './functions.js';
+const { booksFromUser, booksFromModule, booksWithStatus, incrementPriceOfbooks } = f;
 
 import './style.css'
 import javascriptLogo from '/logoBatoi.png'
 
-import '../src/functions.js'
-import data from '../src/services/datos.js' 
-import * as f from '../src/functions.js'
+
+
+
 document.querySelector('#app').innerHTML = `
   <header>
     <img src="${javascriptLogo}" class="logo" alt="JavaScript logo" />
@@ -19,5 +21,6 @@ document.querySelector('#app').innerHTML = `
 
 
 console.log(f.booksFromUser(data.books, 4));
-console.log(f.booksFromModule(data.books, 5021).filter(book => book.status === 'good'));
-  
+console.log(f.booksWithStatus(booksFromModule(data.books, "5021"), "good"));
+console.log(incrementPriceOfbooks(data.books, 0.1));
+
