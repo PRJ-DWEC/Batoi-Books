@@ -1,11 +1,11 @@
 export default class Module{
-    constructor(code, cliteral, vilteral, courseId){
+    constructor(code, cliteral, vliteral, courseId){
         this.code = code;
         this.cliteral = cliteral;
-        this.vilteral = vilteral;
+        this.vliteral = vliteral;
         this.courseId = courseId;
     }
     toString(){
-        return `Module {code: ${this.code}, cliteral: ${this.cliteral}, vilteral: ${this.vilteral}, courseId: ${this.courseId}}`;
+        return `Module {code: ${this.code}, cliteral: ${this.cliteral}, vilteral: ${this.vliteral}, courseId: ${this.courseId}}`;
     }
 }

@@ -5,17 +5,19 @@ export default class Books {
     this.data = [];
     this.idLibros = 0;
   }
-
+ 
   populate(books) {
-    this.idLibros = books.length;
     this.data = books.map(item => new Book(item));
+    this.idLibros = this.data.length ? Math.max(...this.data.map(b => b.id)) : 0;
   }
+  
 
   addBook(bookData) {
-    const newBook = new Book({ ...bookData, id: this.data.length});
-    this.data.push(newBook);
-    return newBook;
-  }
+  const id = this.data.length ? Math.max(...this.data.map(b => b.id)) + 1 : 1;
+  const newBook = new Book({ id, ...bookData });
+  this.data.push(newBook);
+  return newBook; // devuelve el objeto Book añadido
+}
   
   removeBook(bookId) {
     const index = this.data.findIndex(book => book.id === bookId);
@@ -31,7 +33,7 @@ export default class Books {
     this.data[index] = updatedBook;
   
     return updatedBook; 
-  }s
+  }
 
   getBookById(bookId){
     const book = this.data.find(book => book.id === bookId);
@@ -49,9 +51,10 @@ export default class Books {
     return index;
   }
 
-  bookExists(userId, moduleId) {
-  return this.data.some(book => book.userId === userId && book.moduleId === moduleId);
+  bookExists(userId, moduleCode) {
+    return this.data.some(book => book.userId === userId && book.moduleCode === moduleCode);
   }
+  
 
   booksFromUser(userId){
     return this.data.filter(book => book.userId === userId); 
@@ -76,19 +79,23 @@ export default class Books {
     return average.toFixed(2) + ' €';
   }
   booksOfTypeNotes(){
-    return this.data.filter(book => book.publisher === 'Apunts');
+    const NOTE_TYPE = 'Apunts';
+    return this.data.filter(book => book.publisher === NOTE_TYPE);
 
   }
   booksNotSold(){
     return this.data.filter(book => book.soldDate === '');
   }
-  incrementPriceOfbooks(percentatge){
-    return this.data.map(book => ({
-        ...book, 
-        price: book.price + book.price *  percentatge}));
+  incrementPriceOfbooks(percentatge) {
+    this.data = this.data.map(book => {
+      book.price = +(book.price * (1 + percentatge)).toFixed(2);
+      return book;
+    });
   }
+    
   toString() {
     return this.data.map(book => book.toString()).join('\n');
   }
   
 }
+ 
