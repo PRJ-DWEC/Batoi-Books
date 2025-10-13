@@ -21,33 +21,32 @@ document.querySelector('#app').innerHTML = `
 
 async function init() {
   try {
-    // Cargamos los datos desde la API
     await users.populate();
     await modules.populate();
     await books.populate();
 
-    // Mostrar todos los libros
+
     console.log('--- Todos los libros ---');
     console.log(books.toString());
 
-    // Mostrar todos los usuarios
+
     console.log('--- Todos los usuarios ---');
     console.log(users.toString());
 
-    // Mostrar todos los módulos
+
     console.log('--- Todos los módulos ---');
     console.log(modules.toString());
 
-    // Ejemplos de consultas
+
     console.log('--- Libros del módulo 5021 ---');
     const books5021 = books.booksFromModule('5021');
-    books5021.forEach(book => console.log(book.toString()));
+    console.log(books5021.toString());
+  
 
     console.log('--- Libros nuevos ---');
     const newBooks = books.booksWithStatus('new');
-    newBooks.forEach(book => console.log(book.toString()));
+    console.log(newBooks.toString());
 
-    // Ya no usamos incrementPriceOfbooks, método eliminado
 
   } catch (error) {
     console.error('Error:', error.message);

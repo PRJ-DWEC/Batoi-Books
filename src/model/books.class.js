@@ -6,7 +6,6 @@ export default class Books {
     this.data = [];
   }
 
-  // 🔹 Carga todos los libros (desde API o desde un array local)
   async populate(books) {
     if (books) {
       this.data = books.map(item => new Book(item));
@@ -16,7 +15,7 @@ export default class Books {
     }
   }
 
-  // 🔹 Añade un libro a la base de datos
+
   async addBook(bookData) {
     const newBookData = await api.addDBBook(bookData);
     const newBook = new Book(newBookData);
@@ -24,7 +23,6 @@ export default class Books {
     return newBook;
   }
 
-  // 🔹 Elimina un libro por ID
   async removeBook(bookId) {
     const book = this.getBookById(bookId); // lanza error si no existe
     await api.removeDBBook(bookId);
@@ -32,7 +30,7 @@ export default class Books {
     return book;
   }
 
-  // 🔹 Modifica un libro existente
+
   async changeBook(newBookData) {
     const _ = this.getBookById(newBookData.id); // lanza error si no existe
     const updatedData = await api.changeDBBook(newBookData);
@@ -42,7 +40,7 @@ export default class Books {
     return updatedBook;
   }
 
-  // 🔹 Métodos de consulta (no acceden a la API, trabajan en memoria)
+
   getBookById(bookId) {
     const book = this.data.find(b => b.id === bookId);
     if (!book) throw new Error(`No existe ese libro ${bookId}`);
@@ -89,8 +87,7 @@ export default class Books {
     return this.data.filter(b => !b.soldDate || b.soldDate === '');
   }
 
-  // 🔹 (Eliminado incrementPriceOfbooks, ya no se usa)
-  // incrementPriceOfbooks(percentatge) { ... }  ← fuera
+
 
   toString() {
     return this.data.map(b => b.toString()).join('\n');

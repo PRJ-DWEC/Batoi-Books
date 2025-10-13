@@ -6,7 +6,7 @@ export default class Users {
     this.data = [];
   }
 
-  // 🔹 Carga los usuarios desde la API o desde un array inicial
+
   async populate(data) {
     if (data) {
       this.data = data.map(d => new User(d.id, d.nick, d.email, d.password));
@@ -16,7 +16,7 @@ export default class Users {
     }
   }
 
-  // 🔹 Añade un usuario (tanto en la API como en memoria)
+
   async addUser(user) {
     const newUserData = await api.addDBUser(user);
     const newUser = new User(newUserData.id, newUserData.nick, newUserData.email, newUserData.password);
@@ -24,7 +24,7 @@ export default class Users {
     return newUser;
   }
 
-  // 🔹 Elimina un usuario (tanto en la API como en memoria)
+
   async removeUser(id) {
     const index = this.getUserIndexById(id);
     if (index === -1) throw new Error(`No existe ese usuario ${id}`);
@@ -34,7 +34,7 @@ export default class Users {
     return removedUser;
   }
 
-  // 🔹 Modifica un usuario (PUT en API)
+
   async changeUser(user) {
     const index = this.getUserIndexById(user.id);
     if (index === -1) throw new Error(`No existe ese usuario ${user.id}`);
@@ -45,7 +45,7 @@ export default class Users {
     return updatedUser;
   }
 
-  // 🔹 Cambia solo la contraseña de un usuario (PATCH en API)
+
   async changeUserPassword(id, newPassword) {
     const index = this.getUserIndexById(id);
     if (index === -1) throw new Error(`No existe ese usuario ${id}`);
