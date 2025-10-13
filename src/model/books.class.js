@@ -6,13 +6,9 @@ export default class Books {
     this.data = [];
   }
 
-  async populate(books) {
-    if (books) {
-      this.data = books.map(item => new Book(item));
-    } else {
-      const data = await api.getDBBooks();
-      this.data = data.map(b => new Book(b));
-    }
+  async populate() {
+    const books = await api.getDBBooks();
+    this.data = books.map(b => new Book(b));
   }
 
 

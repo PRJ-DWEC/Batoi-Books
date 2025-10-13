@@ -7,13 +7,9 @@ export default class Modules {
   }
 
 
-  async populate(data) {
-    if (data) {
-      this.data = data.map(m => new Module(m.code, m.cliteral, m.vliteral, m.courseId));
-    } else {
-      const modules = await api.getDBModules();
-      this.data = modules.map(m => new Module(m.code, m.cliteral, m.vliteral, m.courseId));
-    }
+  async populate() {
+    const modules = await api.getDBModules();
+    this.data = modules.map(m => new Module(m.code, m.cliteral, m.vliteral, m.courseId));
   }
 
 

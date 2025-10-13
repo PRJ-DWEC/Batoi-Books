@@ -41,11 +41,6 @@ async function init() {
     console.log('--- Libros del módulo 5021 ---');
     const books5021 = books.booksFromModule('5021');
     console.log(books5021.toString());
-  
-
-    console.log('--- Libros nuevos ---');
-    const newBooks = books.booksWithStatus('new');
-    console.log(newBooks.toString());
 
 
   } catch (error) {
