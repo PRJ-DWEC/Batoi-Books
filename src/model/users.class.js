@@ -31,7 +31,7 @@ export default class Users {
 
   async changeUser(user) {
     const index = this.getUserIndexById(user.id);
-    if (index === -1) throw new Error(`No existe ese usuario ${user.id}`);
+
 
     const updatedData = await api.changeDBUser(user);
     const updatedUser = new User(updatedData.id, updatedData.nick, updatedData.email, updatedData.password);
