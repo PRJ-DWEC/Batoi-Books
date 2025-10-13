@@ -40,5 +40,5 @@ export async function changeDBBook(book) {
 export async function removeDBBook(id) {
   const res = await fetch(`${URL}/${id}`, { method: 'DELETE' });
   if (!res.ok) throw new Error('Error al eliminar el libro');
-  return true;
+  
 }

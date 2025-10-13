@@ -22,12 +22,10 @@ export default class Users {
 
 
   async removeUser(id) {
-    const index = this.getUserIndexById(id);
-    if (index === -1) throw new Error(`No existe ese usuario ${id}`);
-
+    const user = this.getUserById(id); // Lanza error si no existe
     await api.removeDBUser(id);
-    const [removedUser] = this.data.splice(index, 1);
-    return removedUser;
+    this.data = this.data.filter(u => u.id !== id);
+    return user;
   }
 
 

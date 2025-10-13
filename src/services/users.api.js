@@ -51,5 +51,4 @@ export async function changeDBUserPassword(id, newPassword) {
 export async function removeDBUser(id) {
   const res = await fetch(`${URL}/${id}`, { method: 'DELETE' });
   if (!res.ok) throw new Error('Error al eliminar el usuario');
-  return true;
 }
