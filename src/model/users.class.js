@@ -22,7 +22,7 @@ export default class Users {
 
 
   async removeUser(id) {
-    const user = this.getUserById(id); // Lanza error si no existe
+    const user = await this.getUserById(id); // Lanza error si no existe
     await api.removeDBUser(id);
     this.data = this.data.filter(u => u.id !== id);
     return user;
@@ -50,10 +50,9 @@ export default class Users {
   }
 
   // 🔹 Métodos locales de consulta
-  getUserById(id) {
-    const user = this.data.find(u => u.id === id);
-    if (!user) throw new Error(`No existe ese usuario ${id}`);
-    return user;
+  async getUserById(id) {
+    const user = await api.getDBUserById(id);
+    return new User(user.id, user.nick, user.email, user.password);
   }
 
   getUserIndexById(id) {

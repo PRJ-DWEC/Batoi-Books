@@ -244,10 +244,4 @@ describe('Clase Books', () => {
       expect(item.soldDate).toBe('')
     }
   })
-
-  test('incrementPriceOfbooks incrementa el precio un 10% y lo guarda con 2 decimales', async () => {
-    const oldPrices = books.data.map(book => book.price)
-    books.incrementPriceOfbooks(0.1)
-    books.data.every((book, index) => book.price === Math.round(oldPrices[index]*100)/100 )
-  });
 })

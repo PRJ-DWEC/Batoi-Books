@@ -25,6 +25,12 @@ export async function addDBUser(user) {
   return await res.json();
 }
 
+export async function getDBUserById(userId) {
+  const res = await fetch(URL + "/" + userId);
+  if (!res.ok) throw new Error('User Not Found');
+  return await res.json();
+}
+
 
 export async function changeDBUser(user) {
   const res = await fetch(`${URL}/${user.id}`, {
