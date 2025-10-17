@@ -12,8 +12,8 @@ const restHandlers = [
   http.get('http://localhost:3000/books/3', () => {
     return HttpResponse.json(mockBooks[1])
   }),
-  http.get('http://localhost:3000/books/100', () => {
-    return HttpResponse.notFound()
+  http.get('http://localhost:3000/books/100', (req, res, ctx) => {
+    return res(ctx.status(404))
   }),
   http.post('http://localhost:3000/books', async ({ request }) => {
     const body = await request.json()
@@ -29,10 +29,7 @@ const restHandlers = [
     return HttpResponse.json(body)
   }),
   http.put('http://localhost:3000/books/100', (req, res, ctx) => {
-    console.log('PUT 100')
-//    return HttpResponse.json({ id: 100 })
-
-    return HttpResponse.notFound()
+    return res(ctx.status(404))
   }),
 ]
 
@@ -120,7 +117,7 @@ describe('Clase Books', () => {
   });
 
   test('changeBook modifica un libro si existe', async () => {
-    const book = {...books.data[0]}
+    const book = books.data[0]
     book.price = 100
     const modifiedBook = await books.changeBook(book)
     expect(modifiedBook).toBeInstanceOf(Book)
@@ -247,4 +244,10 @@ describe('Clase Books', () => {
       expect(item.soldDate).toBe('')
     }
   })
+
+  test('incrementPriceOfbooks incrementa el precio un 10% y lo guarda con 2 decimales', async () => {
+    const oldPrices = books.data.map(book => book.price)
+    books.incrementPriceOfbooks(0.1)
+    books.data.every((book, index) => book.price === Math.round(oldPrices[index]*100)/100 )
+  });
 })

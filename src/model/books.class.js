@@ -83,7 +83,13 @@ export default class Books {
     return this.data.filter(b => !b.soldDate || b.soldDate === '');
   }
 
-
+  incrementPriceOfbooks(percentage) {
+    this.data.forEach(book => {
+      const increment = book.price * (percentage / 100);
+      book.price = parseFloat((book.price + increment).toFixed(2));
+    });
+    return this.data;
+  }
 
   toString() {
     return this.data.map(b => b.toString()).join('\n');
