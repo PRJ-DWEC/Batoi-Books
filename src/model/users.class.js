@@ -42,7 +42,6 @@ export default class Users {
 
   async changeUserPassword(id, newPassword) {
     const index = this.getUserIndexById(id);
-    if (index === -1) throw new Error(`No existe ese usuario ${id}`);
 
     const updatedData = await api.changeDBUserPassword(id, newPassword);
     this.data[index].password = updatedData.password;

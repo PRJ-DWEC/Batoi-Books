@@ -1,4 +1,4 @@
-const URL = 'http://localhost:3000/books'; // ⚠️ ajusta si tu json-server usa otro puerto
+const URL = import.meta.env.VITE_SERVER + "/books"; 
 
 
 export async function getDBBooks() {

@@ -1,4 +1,4 @@
-const URL = 'http://localhost:3000/users';
+const URL = import.meta.env.VITE_SERVER + "/users"; 
 
 
 export async function getDBUsers() {

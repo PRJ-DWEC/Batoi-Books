@@ -1,4 +1,4 @@
-const URL = 'http://localhost:3000/modules';
+const URL = import.meta.env.VITE_SERVER + "/modules"; 
 
 
 export async function getDBModules() {

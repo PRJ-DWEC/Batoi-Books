@@ -21,9 +21,9 @@ document.querySelector('#app').innerHTML = `
 
 async function init() {
   try {
-    await users.populate();
-    await modules.populate();
-    await books.populate();
+
+    await Promise.all([users.populate(), modules.populate(), books.populate()]);
+    
 
 
     console.log('--- Todos los libros ---');
