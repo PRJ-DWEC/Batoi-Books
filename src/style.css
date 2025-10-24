@@ -1,11 +1,13 @@
+/* Estilos base proporcionados (sin cambios) */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* Forzar esquema claro para que coincida con la imagen */
+  color-scheme: light;
+  color: #213547;
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -55,10 +57,6 @@ h1 {
   filter: drop-shadow(0 0 2em #f7df1eaa);
 }
 
-.card {
-  padding: 2em;
-}
-
 .read-the-docs {
   color: #888;
 }
@@ -70,9 +68,11 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: #f9f9f9; /* Color claro por defecto */
+  color: #213547; /* Texto oscuro */
   cursor: pointer;
   transition: border-color 0.25s;
+  border-color: #ccc; /* Borde claro */
 }
 button:hover {
   border-color: #646cff;
@@ -82,15 +82,69 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* --- ESTILOS ESPECÍFICOS PARA LA LISTA DE LIBROS Y LAS TARJETAS --- */
+
+/* Contenedor de la lista */
+#list {
+  display: grid;
+  /* Crea columnas automáticas que se ajustan al ancho, mínimo 220px */
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem; /* Espacio entre las tarjetas */
+  padding: 1rem 0; /* Espacio vertical alrededor de la lista */
+  text-align: center; /* Centra el texto dentro de las tarjetas */
+}
+
+/* Estilo de cada tarjeta de libro (.card dentro de #list) */
+#list .card {
+  background-color: #fddde6; /* Color rosa pálido/salmón */
+  color: #8c1c1c; /* Color de texto oscuro rojizo */
+  border: 1px solid #fbc4d0; /* Borde ligeramente más oscuro */
+  border-radius: 12px; /* Bordes más redondeados */
+  padding: 1.5em 1em; /* Relleno interno */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Sombra muy sutil */
+}
+
+/* Ocultar la imagen dentro de la tarjeta */
+#list .card img {
+  display: none;
+}
+
+/* Título del libro (Módulo y ID) */
+#list .card h3 {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 0 0 0.4rem 0;
+  color: #6d1a1a; /* Tono más oscuro para el título */
+}
+
+/* Editorial */
+#list .card h4 {
+  font-size: 1em;
+  font-weight: bold;
+  margin: 0.2rem 0;
+}
+
+/* Párrafos (páginas, estado, venta, comentarios) */
+#list .card p {
+  font-size: 0.9em;
+  margin: 0.4rem 0;
+  color: #a04040; /* Tono intermedio */
+}
+
+/* Precio (último h4 dentro del div de la tarjeta) */
+#list .card div > h4:last-of-type {
+  font-size: 1.5em;
+  font-weight: bold;
+  margin-top: 1rem;
+  color: #6d1a1a; /* Mismo color que el título */
+}
+
+/* --- FIN DE ESTILOS ESPECÍFICOS --- */
+
+/* Media query original (ajustada para modo claro) */
 @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
   a:hover {
     color: #747bff;
   }
-  button {
-    background-color: #f9f9f9;
-  }
+  /* button ya tiene estilo claro por defecto */
 }
