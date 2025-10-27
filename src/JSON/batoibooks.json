@@ -2196,6 +2196,28 @@
       "soldDate": "2025-10-21",
       "comments": "",
       "userId": 1
+    },
+    {
+      "id": "63c7",
+      "moduleCode": "028503",
+      "publisher": "Pissara",
+      "price": 5.5,
+      "pages": 25,
+      "status": "bad",
+      "soldDate": "",
+      "comments": "MOLT MAL",
+      "userId": 1
+    },
+    {
+      "id": "6dd6",
+      "moduleCode": "0371",
+      "publisher": "Python",
+      "price": 3.33,
+      "pages": 33,
+      "status": "new",
+      "soldDate": "",
+      "comments": "33",
+      "userId": 1
     }
   ]
 }
