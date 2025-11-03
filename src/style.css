@@ -148,3 +148,160 @@ button:focus-visible {
   }
   /* button ya tiene estilo claro por defecto */
 }
+/* ... (Todos tus estilos anteriores) ... */
+
+/* --- FIN DE ESTILOS ESPECÍFICOS --- */
+
+/* AÑADIDO: Estilos para botones de icono en la tarjeta */
+#list .card .card-buttons {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-around; /* Espacio entre botones */
+  border-top: 1px solid #fbc4d0;
+  padding-top: 0.75rem;
+}
+
+#list .card .card-buttons button {
+  background: #fff;
+  border: 1px solid #fbc4d0;
+  border-radius: 50%; /* Botones redondos */
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: #8c1c1c; /* Color de icono */
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+#list .card .card-buttons button:hover {
+  background: #fef0f4; /* Rosa muy claro al pasar el ratón */
+  border-color: #8c1c1c; /* Borde oscuro al pasar el ratón */
+}
+
+#list .card .card-buttons button .material-icons {
+  font-size: 20px; /* Tamaño del icono */
+}
+
+/* AÑADIDO: Estilos para el formulario (título y campo ID) */
+#form h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #6d1a1a; /* Mismo color que títulos de tarjeta */
+  text-align: left;
+  font-size: 1.5em;
+  border-bottom: 2px solid #fddde6;
+  padding-bottom: 0.5rem;
+}
+
+#id-div {
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+/* Estilo para el campo ID cuando está deshabilitado */
+#id-div input[disabled] {
+  background: #eee;
+  color: #777;
+  border-color: #ddd;
+  cursor: not-allowed;
+}
+
+/* --- (AÑADIDO) ESTILOS PARA EL FORMULARIO "BONITO" --- */
+#bookForm {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: left;
+  max-width: 500px; /* Limita el ancho del formulario */
+  margin: 1rem auto; /* Centra el formulario */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+#bookForm div {
+  margin-bottom: 1.25rem;
+}
+
+#bookForm label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #333;
+}
+
+#bookForm input[type="text"],
+#bookForm input[type="number"],
+#bookForm input[type="date"],
+#bookForm select,
+#bookForm textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box; /* Asegura que el padding no afecte el ancho */
+  font-size: 1em;
+}
+
+#bookForm input:focus,
+#bookForm select:focus,
+#bookForm textarea:focus {
+  border-color: #646cff;
+  outline: 2px solid #646cff;
+  outline-offset: 2px;
+}
+
+#bookForm .radio-group label {
+  display: block; /* La etiqueta principal */
+}
+#bookForm .radio-group div {
+  display: flex; /* Alinea los radios horizontalmente */
+  gap: 1.5rem;
+  margin-top: 0.25rem;
+}
+#bookForm .radio-group div label {
+  display: inline; /* Las etiquetas de cada radio */
+  margin-bottom: 0;
+  font-weight: 400;
+  margin-left: 0.25rem;
+}
+#bookForm .radio-group div input {
+  width: auto;
+}
+
+#bookForm .form-buttons {
+  display: flex;
+  justify-content: flex-end; /* Alinea botones a la derecha */
+  gap: 0.75rem;
+  border-top: 1px solid #eee;
+  padding-top: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+#bookForm .form-buttons button[type="submit"] {
+  background-color: #646cff;
+  color: white;
+  border-color: #646cff;
+}
+#bookForm .form-buttons button[type="submit"]:hover {
+  background-color: #535bf2;
+}
+
+#bookForm .form-buttons button[type="reset"] {
+  background-color: #f9f9f9;
+  color: #333;
+  border-color: #ccc;
+}
+#bookForm .form-buttons button[type="reset"]:hover {
+  background-color: #f0f0f0;
+  border-color: #bbb;
+}
+
+/* Media query original (ajustada para modo claro) */
+@media (prefers-color-scheme: light) {
+  a:hover {
+    color: #747bff;
+  }
+}

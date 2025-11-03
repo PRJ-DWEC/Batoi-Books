@@ -23,16 +23,16 @@ document.querySelector("#app").innerHTML = `
    
     <div id="list" class="active"></div> 
 
-    <div id="remove">
-      <label for="id-remove">ID del libro a borrar:</label> 
-      <input type="text" id="id-remove" placeholder="Introduce el ID del libro" /> 
-      <button id="removeBtn">Borrar</button>
-    </div>
-
-   
     <div id="form">
+      <h3 id="formTitle">Añadir libro</h3>
+
       <form id="bookForm" novalidate> 
        
+        <div id="id-div" style="display: none;">
+          <label for="id">ID:</label>
+          <input type="text" id="id" name="id" />
+        </div>
+
         <div>
           <label for="moduleCode">Módulo:</label>
           <select id="moduleCode" name="moduleCode" required></select>

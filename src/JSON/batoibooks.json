@@ -2215,9 +2215,53 @@
       "price": 3.33,
       "pages": 33,
       "status": "new",
-      "soldDate": "",
+      "soldDate": "2025-11-01",
       "comments": "33",
-      "userId": 1
+      "userId": 2
+    },
+    {
+      "id": "8b6f",
+      "moduleCode": "0026",
+      "publisher": "Miau",
+      "price": 3,
+      "pages": 3,
+      "status": "good",
+      "soldDate": "",
+      "comments": "",
+      "userId": 2
+    },
+    {
+      "id": "d90d",
+      "moduleCode": "0047",
+      "publisher": "Verdug",
+      "price": 3,
+      "pages": 3,
+      "status": "good",
+      "soldDate": "",
+      "comments": "",
+      "userId": 2
+    },
+    {
+      "id": "0a5c",
+      "moduleCode": "0046",
+      "publisher": "dsad",
+      "price": 2131,
+      "pages": 123,
+      "status": "good",
+      "soldDate": "",
+      "comments": "",
+      "userId": 2
+    },
+    {
+      "id": "9c65",
+      "moduleCode": "0047",
+      "publisher": "McGraw-Hill",
+      "price": 2,
+      "pages": 2,
+      "status": "good",
+      "soldDate": "",
+      "comments": "",
+      "userId": 2
     }
   ]
 }
