@@ -2262,6 +2262,39 @@
       "soldDate": "",
       "comments": "",
       "userId": 2
+    },
+    {
+      "id": "54a5",
+      "moduleCode": "0028",
+      "publisher": "McGraw-Hill",
+      "price": 2,
+      "pages": 1,
+      "status": "good",
+      "soldDate": "",
+      "comments": "hola",
+      "userId": 2
+    },
+    {
+      "id": "efc5",
+      "moduleCode": "0014",
+      "publisher": "McGraw-Hill",
+      "price": 4,
+      "pages": 4,
+      "status": "new",
+      "soldDate": "2025-10-29",
+      "comments": "adios",
+      "userId": 2
+    },
+    {
+      "id": "a878",
+      "moduleCode": "0046",
+      "publisher": "miau",
+      "price": 3,
+      "pages": 3,
+      "status": "good",
+      "soldDate": "",
+      "comments": "",
+      "userId": 2
     }
   ]
 }
