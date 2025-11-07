@@ -9,6 +9,8 @@ export default class Controller {
     this.books = new Books();
     this.modules = new Modules();
     this.cart = new Cart(); 
+    // Hardcodeado según el ejercicio (usado en handleSubmit y ahora en validación)
+    this.currentUserId = 2; 
   }
 
   async init() {
@@ -25,7 +27,10 @@ export default class Controller {
       // 1. Asigna el manejador para el submit del formulario (Añadir/Editar)
       this.view.setBookSubmitHandler(this.handleSubmitForm.bind(this));
       
-      // 2. Asigna los manejadores para los botones de las tarjetas
+      // 2. (NUEVO) Asigna el manejador para el cambio en el select de módulo
+      this.view.bindModuleSelectChange(this.handleModuleChange.bind(this));
+      
+      // 3. Asigna los manejadores para los botones de las tarjetas
       this.view.bindBookListEvents(
           this.handleAddToCart.bind(this), 
           this.handleEditBook.bind(this), 
@@ -49,12 +54,10 @@ export default class Controller {
   async handleSubmitForm(payload) {
     
     // --- VALIDACIÓN AÑADIDA ---
-    // Comprobamos que los campos obligatorios del payload no estén vacíos
-    // (Basado en los 'required' del HTML en main.js)
-    if (!payload.moduleCode || !payload.publisher || !payload.price || !payload.pages) {
-      this.view.showMessage("error", "Necesitas rellenar los campos obligatorios (Módulo, Editorial, Precio y Páginas).");
-      return; // Detenemos la función aquí si la validación falla
-    }
+    // La validación de campos vacíos y la de módulo duplicado
+    // ahora se gestionan en la vista (`_validateForm`),
+    // que se llama ANTES de que el controlador reciba el payload.
+    // Así que aquí ya no es necesaria la comprobación manual.
     // --- FIN DE LA VALIDACIÓN ---
 
     const bookId = payload.id; 
@@ -64,7 +67,7 @@ export default class Controller {
         ...payload,
         price: parseFloat(payload.price) || 0,
         pages: parseInt(payload.pages, 10) || 0,
-        userId: 2, // userId '2' 
+        userId: this.currentUserId, // Usamos el ID de usuario hardcodeado
         soldDate: payload.soldDate || "", 
       };
       
@@ -139,6 +142,48 @@ export default class Controller {
     } catch (error) {
         this.view.showMessage("error", `Error al preparar edición: ${error.message}`);
     }
+  }
+  
+  /**
+   * (NUEVO) Maneja el cambio en el select de módulos para validar duplicados
+   */
+  async handleModuleChange(moduleCode) {
+    // 1. Limpiamos siempre la validación custom anterior
+    this.view.setModuleSelectValidity("");
+  
+    // 2. Si eligen "Selecciona..." (valor vacío), no hay nada que validar.
+    if (!moduleCode) {
+      this.view.validateModuleField(); // Esto limpiará el span de error
+      return;
+    }
+  
+    // 3. Esta validación SÓLO se aplica al AÑADIR, no al EDITAR.
+    // Si el campo ID tiene un valor, estamos editando.
+    const isEditing = this.view.idInput && this.view.idInput.value;
+    if (isEditing) {
+      this.view.validateModuleField(); // Limpia por si acaso
+      return;
+    }
+  
+    // 4. Estamos AÑADIENDO. Comprobamos si ya existe.
+    try {
+      const exists = await this.books.bookExists(this.currentUserId, moduleCode);
+      
+      if (exists) {
+        // Si existe, ponemos el error personalizado
+        this.view.setModuleSelectValidity("Ya tienes un libro a la venta para este módulo.");
+      }
+      // Si no existe, la validez (vacía) ya está puesta desde el paso 1.
+    
+    } catch (error) {
+      // Si la API falla, no bloqueamos al usuario, pero mostramos un error.
+      this.view.showMessage("error", `Error al comprobar el módulo: ${error.message}`);
+      // Dejamos la validez custom vacía para que pueda continuar
+      this.view.setModuleSelectValidity(""); 
+    }
+  
+    // 5. Le decimos a la vista que actualice el estado visual de ESE campo
+    this.view.validateModuleField();
   }
   
   /**

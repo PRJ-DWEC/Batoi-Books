@@ -28,6 +28,9 @@ export default class View {
         e.preventDefault();
         this.resetForm();
     });
+    
+    // (NUEVO) Callback para el listener del select
+    this._handleModuleChangeCallback = null;
   }
 
   /**
@@ -190,7 +193,7 @@ export default class View {
     const pages = this.bookForm.pages;
     const status = this.bookForm.querySelector('input[name="status"]');
 
-    // 1. Validar Módulo (requerido)
+    // 1. Validar Módulo (requerido + validación custom)
     if (!moduleCode.validity.valid) {
       isValid = false;
       if(this.errors.moduleCode) this.errors.moduleCode.textContent = moduleCode.validationMessage;
@@ -274,6 +277,9 @@ export default class View {
     this.bookForm.soldDate.value = '';
     this.bookForm.moduleCode.value = ''; // Resetea el select
     
+    // (NUEVO) Limpia el error de validación personalizado
+    this.setModuleSelectValidity("");
+    
     // 2. Resetea el radio button al valor por defecto ('good')
     const defaultRadio = this.bookForm.querySelector('input[name="status"][value="good"]');
     if (defaultRadio) {
@@ -302,7 +308,8 @@ export default class View {
   populateFormForEdit(book) {
     if (!this.bookForm) return;
     
-    // Limpiamos errores anteriores
+    // Limpiamos errores anteriores (incluido el de módulo duplicado)
+    this.setModuleSelectValidity("");
     this._clearMessages();
 
     if (this.formTitle) this.formTitle.textContent = 'Editar libro';
@@ -325,6 +332,53 @@ export default class View {
     this.showTab('form');
     this.form.scrollIntoView({ behavior: 'smooth' });
   }
+
+  // --- (NUEVOS) MÉTODOS PARA VALIDACIÓN DE MÓDULO ---
+
+  /**
+   * (NUEVO) Establece el mensaje de validación personalizado en el select
+   */
+  setModuleSelectValidity(message) {
+    if (this.moduleSelect) {
+      this.moduleSelect.setCustomValidity(message);
+    }
+  }
+
+  /**
+   * (NUEVO) Actualiza el span de error del módulo inmediatamente
+   */
+  validateModuleField() {
+    if (!this.moduleSelect || !this.errors.moduleCode) return;
+  
+    // Limpiamos el error primero
+    this.errors.moduleCode.textContent = '';
+  
+    // Comprobamos la validez (que incluirá nuestro setCustomValidity)
+    if (!this.moduleSelect.validity.valid) {
+      // Mostramos el mensaje de validación (el estándar o el nuestro)
+      this.errors.moduleCode.textContent = this.moduleSelect.validationMessage;
+    }
+  }
+
+  /**
+   * (NUEVO) Asigna el manejador de evento 'change' al select de módulos
+   */
+  bindModuleSelectChange(callback) {
+    if (!this.moduleSelect) return;
+  
+    // Limpiamos listener anterior si existe
+    if (this._handleModuleChangeCallback) {
+      this.moduleSelect.removeEventListener('change', this._handleModuleChangeCallback);
+    }
+  
+    this._handleModuleChangeCallback = (event) => {
+      // Pasamos el valor (moduleCode) al controlador
+      callback(event.target.value);
+    };
+  
+    this.moduleSelect.addEventListener('change', this._handleModuleChangeCallback);
+  }
+
 
   _handleBookListClick = (event) => {
     const target = event.target;

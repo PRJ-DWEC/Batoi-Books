@@ -42,3 +42,17 @@ export async function removeDBBook(id) {
   if (!res.ok) throw new Error('Error al eliminar el libro');
   
 }
+
+/**
+ * (NUEVO) Comprueba si ya existe un libro para un usuario y módulo.
+ * Una petición a /books?userId=X&moduleCode=Y devuelve:
+ * - Un array con el libro (longitud > 0) si SÍ existe.
+ * - Un array vacío (longitud === 0) si NO existe.
+ */
+export async function checkDBBookExists(userId, moduleCode) {
+  const res = await fetch(`${URL}?userId=${userId}&moduleCode=${moduleCode}`);
+  if (!res.ok) throw new Error('Error al comprobar la existencia del libro');
+  const data = await res.json();
+  // Si la API devuelve un array, su longitud indica si existe
+  return data.length > 0;
+}

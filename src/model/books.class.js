@@ -49,8 +49,13 @@ export default class Books {
     return index;
   }
 
-  bookExists(userId, moduleCode) {
-    return this.data.some(b => b.userId === userId && b.moduleCode === moduleCode);
+  /**
+   * (MODIFICADO) Comprueba en la BBDD si el usuario ya tiene un libro
+   * para ese módulo.
+   */
+  async bookExists(userId, moduleCode) {
+    // Llama a la nueva función de la API
+    return await api.checkDBBookExists(userId, moduleCode);
   }
 
   booksFromUser(userId) {

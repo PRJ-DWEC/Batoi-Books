@@ -2128,15 +2128,14 @@
   "books": [
     {
       "id": "1",
-      "userId": 2,
       "moduleCode": "5025",
       "publisher": "Apunts",
-      "price": 12,
+      "price": 13,
       "pages": 25,
       "status": "good",
-      "photo": "",
+      "soldDate": "2023-02-01",
       "comments": "",
-      "soldDate": "2023-02-01"
+      "userId": 2
     },
     {
       "userId": 3,
@@ -2283,17 +2282,6 @@
       "status": "new",
       "soldDate": "2025-10-29",
       "comments": "adios",
-      "userId": 2
-    },
-    {
-      "id": "a878",
-      "moduleCode": "0046",
-      "publisher": "miau",
-      "price": 3,
-      "pages": 3,
-      "status": "good",
-      "soldDate": "",
-      "comments": "",
       "userId": 2
     }
   ]
