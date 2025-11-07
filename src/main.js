@@ -21,9 +21,7 @@ document.querySelector("#app").innerHTML = `
 
   <main>
    
-    <div id="list" class="active"></div> 
-
-    <div id="form">
+    <div id="list"></div> <div id="form">
       <h3 id="formTitle">Añadir libro</h3>
 
       <form id="bookForm" novalidate> 

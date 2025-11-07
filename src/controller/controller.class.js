@@ -32,6 +32,12 @@ export default class Controller {
           this.handleRemoveBook.bind(this) // Este es tu "borrar"
       );
 
+      // --- INICIALIZAR EL ROUTER (SPA) ---
+      // Escucha futuros cambios de hash (clics en navegación)
+      window.addEventListener('hashchange', this._handleHashChange.bind(this));
+      // Llama una vez al inicio para establecer la pestaña correcta al cargar
+      this._handleHashChange(); 
+
     } catch (error) {
        this.view.showMessage("error", `Error al inicializar: ${error?.message || error}`);
     }
@@ -122,6 +128,26 @@ export default class Controller {
 
     } catch (error) {
         this.view.showMessage("error", `Error al preparar edición: ${error.message}`);
+    }
+  }
+  
+  /**
+   * (NUEVO) Maneja el cambio de hash para la navegación SPA
+   * @private
+   */
+  _handleHashChange() {
+    // Obtiene el hash (ej. "#form"), quita el '#'
+    // Si está vacío (ej. "index.html"), usa 'list' por defecto.
+    const targetId = window.location.hash.substring(1) || 'list';
+  
+    // 1. Usa la función de la Vista para mostrar la pestaña correcta
+    if (this.view && typeof this.view.showTab === 'function') {
+      this.view.showTab(targetId);
+    }
+  
+    // 2. Si vamos al formulario, lo reseteamos (requisito del ejercicio)
+    if (targetId === 'form' && this.view && typeof this.view.resetForm === 'function') {
+      this.view.resetForm();
     }
   }
 }

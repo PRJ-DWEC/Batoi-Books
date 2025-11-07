@@ -21,28 +21,23 @@ export default class View {
     });
   }
 
+  /**
+   * (MODIFICADO) Prepara la función showTab para que el controlador
+   * la use cuando cambie el hash.
+   */
   setupNavigation() {
     const mainSections = document.querySelectorAll("main > div");
     
-    // Función para cambiar de pestaña
+    // Función para cambiar de pestaña.
+    // El controlador la llamará cuando cambie el hash.
     this.showTab = (targetId) => {
        mainSections.forEach((section) => {
           section.classList.toggle("active", section.id === targetId);
        });
     }
     
-    document.querySelectorAll("nav a").forEach((link) => {
-      link.addEventListener("click", (e) => {
-        e.preventDefault();
-        const targetId = e.currentTarget.getAttribute("href").substring(1);
-        this.showTab(targetId);
-      });
-    });
-    
-    document.getElementById('list')?.classList.add('active');
-    document.getElementById('form')?.classList.remove('active');
-    // document.getElementById('remove')?.classList.remove('active'); // Ya no existe
-    document.getElementById('about')?.classList.remove('active');
+    // Ya no añadimos listeners de clic a la navegación aquí.
+    // El evento 'hashchange' global lo gestionará el controlador.
   }
 
   renderModules(modules) {
@@ -134,7 +129,7 @@ export default class View {
     messageElement.setAttribute("role", "alert");
     messageElement.innerHTML = `
         ${message}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="this.parentElement.remove()">x</button>
+        <button type"button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="this.parentElement.remove()">x</button>
     `;
     this.messages.appendChild(messageElement);
 

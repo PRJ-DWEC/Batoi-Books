@@ -84,11 +84,11 @@ button:focus-visible {
 
 /* --- ESTILOS ESPECÍFICOS PARA LA LISTA DE LIBROS Y LAS TARJETAS --- */
 
-/* Contenedor de la lista */
-#list {
+/* Contenedor de la lista (MODIFICADO: Ahora solo aplica si #list tiene .active) */
+#list.active {
   display: grid;
-  /* Crea columnas automáticas que se ajustan al ancho, mínimo 220px */
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  /* MODIFICADO: Forzamos 4 columnas de tamaño similar */
+  grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem; /* Espacio entre las tarjetas */
   padding: 1rem 0; /* Espacio vertical alrededor de la lista */
   text-align: center; /* Centra el texto dentro de las tarjetas */
@@ -304,4 +304,16 @@ button:focus-visible {
   a:hover {
     color: #747bff;
   }
+}
+
+/* --- (NUEVO) ESTILOS SPA (Single Page Application) --- */
+
+/* Oculta todas las secciones principales (divs dentro de main) por defecto */
+main > div {
+  display: none;
+}
+
+/* Muestra solo la sección que tenga la clase 'active' */
+main > div.active {
+  display: block;
 }
