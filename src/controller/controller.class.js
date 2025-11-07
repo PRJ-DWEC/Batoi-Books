@@ -47,6 +47,16 @@ export default class Controller {
    * Maneja el envío del formulario, tanto para añadir como para editar.
    */
   async handleSubmitForm(payload) {
+    
+    // --- VALIDACIÓN AÑADIDA ---
+    // Comprobamos que los campos obligatorios del payload no estén vacíos
+    // (Basado en los 'required' del HTML en main.js)
+    if (!payload.moduleCode || !payload.publisher || !payload.price || !payload.pages) {
+      this.view.showMessage("error", "Necesitas rellenar los campos obligatorios (Módulo, Editorial, Precio y Páginas).");
+      return; // Detenemos la función aquí si la validación falla
+    }
+    // --- FIN DE LA VALIDACIÓN ---
+
     const bookId = payload.id; 
 
     try {
