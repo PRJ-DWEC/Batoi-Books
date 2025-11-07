@@ -317,3 +317,13 @@ main > div {
 main > div.active {
   display: block;
 }
+
+/* (NUEVO) Estilos para los spans de error del formulario */
+.form-error {
+  display: block; /* Para que aparezca en su propia línea */
+  color: #8c1c1c; /* Un color de error rojizo (temático) */
+  font-size: 0.9em;
+  font-weight: 500;
+  margin-top: 0.25rem;
+  /* El span estará vacío (y por tanto invisible) por defecto */
+}

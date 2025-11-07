@@ -34,18 +34,22 @@ document.querySelector("#app").innerHTML = `
         <div>
           <label for="moduleCode">Módulo:</label>
           <select id="moduleCode" name="moduleCode" required></select>
+          <span id="moduleCode-error" class="form-error"></span>
         </div>
         <div>
           <label for="publisher">Editorial:</label>
           <input type="text" id="publisher" name="publisher" required minlength="2" />
+          <span id="publisher-error" class="form-error"></span>
         </div>
         <div>
           <label for="price">Precio (€):</label>
           <input type="number" id="price" name="price" required min="0" step="0.01" />
+          <span id="price-error" class="form-error"></span>
         </div>
         <div>
           <label for="pages">Páginas:</label>
-          <input type="number" id="pages" name="pages" required min="1" />
+          <input type="number" id="pages" name="pages" required min="0" step="1" />
+          <span id="pages-error" class="form-error"></span>
         </div>
         <div class="radio-group">
           <label>Estado:</label>
@@ -54,6 +58,7 @@ document.querySelector("#app").innerHTML = `
             <input type="radio" id="status-good" name="status" value="good" checked/> <label for="status-good">Bueno</label>
             <input type="radio" id="status-bad" name="status" value="bad" /> <label for="status-bad">Malo</label>
           </div>
+          <span id="status-error" class="form-error"></span>
         </div>
 
        

@@ -12,6 +12,15 @@ export default class View {
     this.idInputDiv = document.getElementById("id-div");
     this.idInput = document.getElementById("id");
 
+    // (NUEVO) Referencias a los spans de error
+    this.errors = {
+      moduleCode: document.getElementById("moduleCode-error"),
+      publisher: document.getElementById("publisher-error"),
+      price: document.getElementById("price-error"),
+      pages: document.getElementById("pages-error"),
+      status: document.getElementById("status-error")
+    };
+
     this.setupNavigation();
     
     // Listener para el botón reset
@@ -147,13 +156,98 @@ export default class View {
   _handleEditClick = null;
   _handleDeleteClick = null;
 
+  // --- MÉTODOS DE VALIDACIÓN PERSONALIZADOS ---
+
+  /**
+   * (MODIFICADO) Limpia los mensajes de error globales Y los spans
+   */
+  _clearMessages() {
+    if (this.messages) {
+      // Limpia solo los mensajes de error globales
+      const errorMessages = this.messages.querySelectorAll('._error');
+      errorMessages.forEach(msg => msg.remove());
+    }
+    // (NUEVO) Limpiar también los spans de error de cada campo
+    if (this.errors) {
+      Object.values(this.errors).forEach(span => {
+        if (span) span.textContent = '';
+      });
+    }
+  }
+
+  /**
+   * (MODIFICADO) Valida el formulario manualmente y muestra errores en los spans.
+   * @returns {boolean} - True si el formulario es válido, false si no.
+   */
+  _validateForm() {
+    this._clearMessages();
+    let isValid = true;
+    
+    // Accedemos a los campos del formulario
+    const moduleCode = this.bookForm.moduleCode;
+    const publisher = this.bookForm.publisher;
+    const price = this.bookForm.price;
+    const pages = this.bookForm.pages;
+    const status = this.bookForm.querySelector('input[name="status"]');
+
+    // 1. Validar Módulo (requerido)
+    if (!moduleCode.validity.valid) {
+      isValid = false;
+      if(this.errors.moduleCode) this.errors.moduleCode.textContent = moduleCode.validationMessage;
+    }
+
+    // 2. Validar Editorial (requerido, minlength)
+    if (!publisher.validity.valid) {
+      isValid = false;
+      if(this.errors.publisher) this.errors.publisher.textContent = publisher.validationMessage;
+    }
+
+    // 3. Validar Precio (requerido, numérico, min: 0)
+    if (!price.validity.valid) {
+      isValid = false;
+      if(this.errors.price) this.errors.price.textContent = price.validationMessage;
+    }
+
+    // 4. Validar Páginas (requerido, numérico, min: 0, entero)
+    if (!pages.validity.valid) {
+      isValid = false;
+      if(this.errors.pages) this.errors.pages.textContent = pages.validationMessage;
+    }
+
+    // 5. Validar Estado (requerido)
+    if (status && !status.validity.valid) {
+      isValid = false;
+      // Usamos el validationMessage del primer radio (todos tienen 'required')
+      if(this.errors.status) this.errors.status.textContent = status.validationMessage;
+    }
+
+    // (Opcional) Mostrar un mensaje genérico arriba si hay errores
+    if (!isValid) {
+      this.showMessage('error', 'Por favor, corrige los errores indicados en el formulario.');
+    }
+
+    return isValid;
+  }
+
+  // --- FIN DE MÉTODOS DE VALIDACIÓN ---
+
   setBookSubmitHandler(callback) {
     if (!this.bookForm) return;
     if (this._handleSubmitCallback) {
         this.bookForm.removeEventListener('submit', this._handleSubmitCallback);
     }
+    
     this._handleSubmitCallback = (event) => {
         event.preventDefault(); 
+        
+        // 1. (MODIFICADO) Llamamos a nuestra validación manual
+        if (!this._validateForm()) {
+          // Si no es válido, detenemos la ejecución.
+          // Los errores ya se han mostrado.
+          return;
+        }
+        
+        // --- El formulario es válido, continuamos ---
         
         if (this.idInput) this.idInput.disabled = false;
         
@@ -163,17 +257,13 @@ export default class View {
         if (payload.id && this.idInput) this.idInput.disabled = true;
 
         callback(payload); 
-        
-        // ¡¡ELIMINADO DE AQUÍ!! -> this.resetForm(); 
     };
-    
-    // (Tu listener para el botón 'reset' en el constructor es correcto)
     
     this.bookForm.addEventListener("submit", this._handleSubmitCallback);
   }
   
   /**
-   * (MODIFICADO) Resetea el formulario manualmente sin usar this.bookForm.reset()
+   * (MODIFICADO) Resetea el formulario manualmente y limpia errores
    */
   resetForm() {
     // 1. Borra los campos manualmente
@@ -201,6 +291,9 @@ export default class View {
       this.idInput.value = ''; 
       this.idInput.disabled = false; 
     }
+
+    // 6. (MODIFICADO) Limpia los mensajes de error globales Y los spans
+    this._clearMessages();
   }
   
   /**
@@ -209,6 +302,9 @@ export default class View {
   populateFormForEdit(book) {
     if (!this.bookForm) return;
     
+    // Limpiamos errores anteriores
+    this._clearMessages();
+
     if (this.formTitle) this.formTitle.textContent = 'Editar libro';
     if (this.idInputDiv) this.idInputDiv.style.display = 'block';
     if (this.idInput) {
