@@ -1,52 +1,47 @@
 /* ---
-  VERSIÓN "PREMIUM" BatoiBooks CSS
-  - (NUEVO) Header "Glassmorphism" y Fijo (Sticky)
-  - (NUEVO) Efecto "Shine" (brillo) en tarjetas al pasar el ratón
-  - (NUEVO) Iconos de tarjeta animados (rotación)
-  - (NUEVO) Animación "Pop" en el precio
-  - (NUEVO) Botón de Guardar "Pulsante"
-  - (NUEVO) Scrollbar personalizada
+  VERSIÓN "MUCHO MUCHO MÁS" (Cyberpunk Neon)
+  - Modo Oscuro Total + Fondo de Nebulosa
+  - Header y Formulario "Glassmorphism"
+  - Bordes de Neón Animados (Conic Gradient)
+  - Tarjetas con inclinación 3D (rotate3d) y efecto "Shine"
+  - (NUEVO) Grupo de botones de neón para "Estado"
+  - (AÑADIDO) Footer "Joan Brotons" centrado y con estilo
 --- */
 
 /* --- 1. Importación de Tipografía y Variables Globales --- */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Paleta de colores más vibrante */
-  --color-primary: #004d99;        /* Azul corporativo más profundo */
-  --color-primary-dark: #003366;
-  --color-secondary: #0099cc;      /* Un cian brillante para interacción */
-  --color-accent: #ffc107;         /* Acento dorado/amarillo */
-  --color-success: #28a745;
-  --color-error: #dc3545;
-  
-  /* Fondos y Superficies */
-  --color-bg-light: #f4f7f6;       /* Fondo de página casi blanco */
-  --color-bg-dark: #e8eef2;
-  --color-surface: #ffffff;
+  /* Paleta Neón */
+  --color-bg-dark: #0a0c10;
+  --color-surface: #1a1c22;
+  --color-cyan: #00f2ea;
+  --color-magenta: #ff00c1;
+  --color-green: #00ff85;
+  --color-yellow: #f8f32b;
+  --color-error: #ff3b30;
   
   /* Texto */
-  --color-text: #212529;
-  --color-text-light: black;
-  --color-text-muted: #5a6570;
+  --color-text-light: #e0e0e0;
+  --color-text-muted: #7a828e;
   
   /* Efectos */
-  --border-radius-md: 12px;
-  --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 10px 20px rgba(0, 0, 0, 0.07);
-  --shadow-lg: 0 15px 30px rgba(0, 77, 153, 0.15); /* Sombra de color primario */
+  --border-radius-md: 14px;
   --transition-fast: all 0.2s ease-out;
-  --transition-smooth: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
   
-  /* Gradientes */
-  --gradient-header: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
-  --gradient-submit: linear-gradient(90deg, var(--color-secondary) 0%, var(--color-primary) 100%);
-  --gradient-success-hover: linear-gradient(45deg, #28a745, #20c997);
-  --gradient-edit-hover: linear-gradient(45deg, #ffc107, #ff8f00);
-  --gradient-delete-hover: linear-gradient(45deg, #dc3545, #ff6b6b);
+  /* Sombras "Glow" */
+  --glow-cyan-xs: 0 0 5px var(--color-cyan);
+  --glow-cyan-md: 0 0 15px var(--color-cyan);
+  --glow-cyan-lg: 0 0 25px var(--color-cyan);
+  --glow-magenta-md: 0 0 15px var(--color-magenta);
+  --glow-green-md: 0 0 15px var(--color-green);
+  --glow-yellow-md: 0 0 15px var(--color-yellow);
+  --glow-error-md: 0 0 15px var(--color-error);
 
-  /* (NUEVO) Gradiente para Glassmorphism */
-  --gradient-glass: linear-gradient(90deg, rgba(0, 77, 153, 0.9) 0%, rgba(0, 153, 204, 0.85) 100%);
+  /* Gradiente para Glassmorphism */
+  --bg-glass: rgba(26, 28, 34, 0.7);
+  --border-glass: rgba(0, 242, 234, 0.3);
 }
 
 /* --- 2. Reseteo y Estilos Base --- */
@@ -61,48 +56,52 @@ html {
 }
 
 body {
-  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
   line-height: 1.6;
-  color: var(--color-text);
-  background-image: linear-gradient(135deg, var(--color-bg-light) 0%, var(--color-bg-dark) 100%);
+  color: var(--color-text-light);
+  /* Fondo oscuro con gradiente tipo nebulosa */
+  background-color: var(--color-bg-dark);
+  background-image: radial-gradient(circle at 1% 1%, rgba(0, 77, 153, 0.3), rgba(0, 77, 153, 0) 30%),
+                    radial-gradient(circle at 99% 99%, rgba(255, 0, 193, 0.2), rgba(255, 0, 193, 0) 40%);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 #app {
-  max-width: 100%; /* Ocupa todo el ancho */
+  max-width: 100%;
   margin: 0 auto;
   padding: 0;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  overflow-x: hidden; /* Previene scroll horizontal */
+  overflow-x: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  color: var(--color-primary-dark);
+  color: var(--color-text-light);
   margin-bottom: 0.75rem;
   line-height: 1.2;
   font-weight: 600;
 }
 
-h1 { font-size: 2.5em; }
+h1 { font-size: 2.5em; text-shadow: var(--glow-cyan-xs); }
 h3 { font-size: 1.75em; }
 h4 { font-size: 1.15em; }
 
 a {
-  color: var(--color-secondary);
+  color: var(--color-cyan);
   text-decoration: none;
   transition: var(--transition-fast);
+  text-shadow: 0 0 3px var(--color-cyan);
 }
 a:hover {
-  color: var(--color-primary);
+  color: var(--color-text-light);
+  text-shadow: var(--glow-cyan-md);
   text-decoration: underline;
 }
 
-/* --- 3. Layout Principal (Header, Nav, Main, Footer) --- */
-
+/* --- 3. Header "Glassmorphism" --- */
 header {
   display: flex;
   align-items: center;
@@ -111,15 +110,15 @@ header {
   width: 100%;
   color: var(--color-text-light);
   
-  /* (NUEVO) Efecto Sticky + Glassmorphism */
+  /* Efecto Sticky + Glassmorphism */
   position: sticky;
   top: 0;
   z-index: 100;
-  background-image: var(--gradient-glass);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 15px rgba(0, 77, 153, 0.2);
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-glass);
+  box-shadow: 0 5px 20px rgba(0, 242, 234, 0.1);
 }
 
 header .logo {
@@ -130,14 +129,13 @@ header .logo {
 }
 header .logo:hover {
   transform: rotate(-10deg) scale(1.1);
+  filter: drop-shadow(0 0 10px var(--color-cyan));
 }
 
 header h1 {
   font-size: 2.25em;
-  margin: 0;
-  color: var(--color-text-light);
   font-weight: 700;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 0 8px var(--color-cyan);
 }
 
 .header-brand {
@@ -156,10 +154,8 @@ nav li a {
   padding: 0.75rem 1.25rem;
   font-weight: 500;
   color: var(--color-text-light);
-  text-decoration: none;
   border-radius: var(--border-radius-md);
   position: relative;
-  overflow: hidden; /* Para el efecto de hover */
   transition: var(--transition-fast);
 }
 nav li a::before {
@@ -170,114 +166,126 @@ nav li a::before {
   transform: translateX(-50%);
   width: 0;
   height: 3px;
-  background-color: var(--color-accent);
+  background-color: var(--color-cyan);
+  box-shadow: var(--glow-cyan-xs);
   transition: var(--transition-fast);
 }
 nav li a:hover,
 nav li a.active {
-  background-color: rgba(255, 255, 255, 0.1);
-  text-decoration: none;
+  color: var(--color-cyan);
+  background-color: rgba(0, 242, 234, 0.05);
+  text-shadow: var(--glow-cyan-xs);
 }
 nav li a.active::before {
-  width: 80%; /* Indicador activo */
+  width: 80%;
 }
 nav li a:hover::before {
   width: 100%;
 }
 
-
+/* --- 4. Main Content --- */
 main {
   width: 100%;
-  max-width: 1600px; /* Ancho máximo para el contenido */
+  max-width: 1600px;
   margin: 0 auto;
   padding: 2.5rem;
   flex-grow: 1;
+  /* (NUEVO) Perspectiva para el 3D de las tarjetas */
+  perspective: 1500px;
 }
 
-footer {
-  width: 100%;
-  padding: 2rem;
-  background-color: var(--color-primary-dark);
-  color: var(--color-bg-light);
-  text-align: center;
-  font-size: 0.9em;
-  margin-top: 2rem;
-}
-
-/* --- 4. Sistema SPA (Single Page Application) --- */
-main > div {
-  display: none;
-}
+main > div { display: none; }
 main > div.active {
   display: block;
-  /* Animación de entrada más sutil */
-  animation: fadeIn 0.4s ease-out;
+  animation: fadeIn 0.5s ease-out;
 }
-
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
+  from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* --- 5. Lista de Libros y Tarjetas (.card) --- */
+/* --- 5. Tarjetas con Borde de Neón Animado y 3D --- */
 #list.active {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 2.5rem;
   text-align: left;
 }
 
 #list .card {
-  background-color: var(--color-surface);
-  color: var(--color-text-muted);
-  border: 1px solid transparent; /* Ocultamos borde por defecto */
+  --border-size: 3px;
+  position: relative;
+  background: var(--color-surface);
   border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-md);
   padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  transition: var(--transition-smooth);
-  position: relative;
-  overflow: hidden; /* Para el borde animado Y EL SHINE */
+  overflow: hidden;
+  /* (NUEVO) Transición 3D */
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), 
+              box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transform: translateZ(0); /* Aceleración HW */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* Borde superior animado */
+/* (NUEVO) Borde de Neón Animado */
 #list .card::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 4px;
-  background-image: var(--gradient-header);
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: var(--transition-smooth);
+  top: 50%;
+  left: 50%;
+  width: calc(100% + 200px); /* Más grande para rotar */
+  height: calc(100% + 200px);
+  z-index: -2;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    from 0deg,
+    var(--color-cyan),
+    var(--color-magenta),
+    var(--color-cyan) 360deg
+  );
+  /* Animación de rotación */
+  animation: rotate-border 5s linear infinite;
+}
+
+/* (NUEVO) Máscara interior (hace que el borde sea visible) */
+#list .card::after {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  top: var(--border-size);
+  left: var(--border-size);
+  width: calc(100% - (var(--border-size) * 2));
+  height: calc(100% - (var(--border-size) * 2));
+  background: var(--color-surface);
+  border-radius: calc(var(--border-radius-md) - var(--border-size));
+}
+
+@keyframes rotate-border {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to   { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* (NUEVO) Efecto 3D y "Glow" en Hover */
+#list .card:hover {
+  transform: translateY(-10px) rotate3d(0.5, -0.8, 0.1, 15deg) scale(1.02);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 40px var(--color-cyan);
 }
 
 /* (NUEVO) Efecto "Shine" en hover */
-#list .card::after {
-  content: '';
+#list .card .shine-effect {
   position: absolute;
   top: 0;
   left: 0;
   width: 50%;
   height: 100%;
   background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
-  transform: translateX(-150%) skewX(-20deg); /* Inicia fuera */
+  transform: translateX(-150%) skewX(-20deg);
   transition: transform 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
   z-index: 1;
 }
-
-#list .card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--shadow-lg);
-}
-#list .card:hover::before {
-  transform: scaleX(1); /* Muestra el borde en hover */
-}
-#list .card:hover::after {
-  transform: translateX(250%) skewX(-20deg); /* Desliza el brillo */
+#list .card:hover .shine-effect {
+  transform: translateX(250%) skewX(-20deg);
 }
 
 
@@ -285,20 +293,21 @@ main > div.active {
 
 #list .card > div:first-of-type {
   flex-grow: 1;
-  position: relative; /* Para que el shine no afecte a los botones */
+  position: relative;
   z-index: 2;
 }
 
 #list .card h3 {
   font-size: 1.3em;
   font-weight: 700;
-  color: var(--color-primary);
+  color: var(--color-cyan);
+  text-shadow: var(--glow-cyan-xs);
 }
 
 #list .card h4 {
   font-size: 1.05em;
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--color-text-light);
   margin-top: 0.5rem;
 }
 
@@ -306,15 +315,15 @@ main > div.active {
   font-size: 0.95em;
   margin: 0.5rem 0;
 }
-/* Estado "En venta" */
 #list .card p:nth-of-type(3) {
-  font-weight: 500;
-  color: var(--color-success);
+  font-weight: 600;
+  color: var(--color-green);
+  text-shadow: 0 0 5px var(--color-green);
 }
-/* Comentarios */
 #list .card p:nth-of-type(4) {
   font-style: italic;
   font-size: 0.9em;
+  color: var(--color-text-muted);
 }
 
 /* Precio */
@@ -322,16 +331,16 @@ main > div.active {
   font-size: 2em;
   font-weight: 700;
   margin-top: 1.25rem;
-  color: var(--color-primary-dark);
+  color: var(--color-green);
   text-align: right;
   letter-spacing: -1px;
+  text-shadow: var(--glow-green-md);
   transition: var(--transition-fast);
 }
-
-/* (NUEVO) Animación "Pop" del precio */
 #list .card:hover div > h4:last-of-type {
-  color: var(--color-accent);
-  transform: scale(1.03);
+  color: var(--color-yellow);
+  text-shadow: var(--glow-yellow-md);
+  transform: scale(1.05);
 }
 
 /* Botones de la tarjeta */
@@ -339,16 +348,16 @@ main > div.active {
   margin-top: 1.5rem;
   display: flex;
   justify-content: flex-end;
-  gap: 0.75rem;
-  border-top: 1px solid var(--color-bg-dark);
+  gap: 1rem;
+  border-top: 1px solid var(--border-glass);
   padding-top: 1.5rem;
-  position: relative; /* Para que el shine no afecte */
+  position: relative;
   z-index: 2;
 }
 
 #list .card .card-buttons button {
-  background: var(--color-surface);
-  border: 2px solid; /* Borde usará el color del icono */
+  background: transparent;
+  border: 2px solid;
   border-radius: 50%;
   width: 44px;
   height: 44px;
@@ -358,53 +367,50 @@ main > div.active {
   padding: 0;
   transition: var(--transition-smooth);
 }
-
-/* Colores por defecto para iconos de tarjeta */
-#list .card .btn-cart {
-  color: var(--color-success);
-  border-color: var(--color-success);
-}
-#list .card .btn-edit {
-  color: var(--color-accent);
-  border-color: var(--color-accent);
-}
-#list .card .btn-delete {
-  color: var(--color-error);
-  border-color: var(--color-error);
-}
-
-/* Iconos */
 #list .card .card-buttons button .material-icons {
   font-size: 20px;
   transition: var(--transition-fast);
 }
 
-/* ¡Efectos de hover impresionantes en botones! */
-#list .card .card-buttons button:hover {
-  color: var(--color-text-light); /* Icono se vuelve blanco en hover */
-  transform: translateY(-3px); /* Sube un poco */
-  box-shadow: var(--shadow-sm);
-  border-color: transparent; /* El borde desaparece para dar paso al gradiente */
+/* Colores Neón por defecto */
+#list .card .btn-cart {
+  color: var(--color-green);
+  border-color: var(--color-green);
+  box-shadow: inset 0 0 8px var(--color-green), 0 0 8px var(--color-green);
+}
+#list .card .btn-edit {
+  color: var(--color-yellow);
+  border-color: var(--color-yellow);
+  box-shadow: inset 0 0 8px var(--color-yellow), 0 0 8px var(--color-yellow);
+}
+#list .card .btn-delete {
+  color: var(--color-magenta);
+  border-color: var(--color-magenta);
+  box-shadow: inset 0 0 8px var(--color-magenta), 0 0 8px var(--color-magenta);
 }
 
-/* (NUEVO) Animación de rotación en iconos */
+/* Hover de Botones (Relleno + Glow Intenso) */
+#list .card .card-buttons button:hover {
+  color: var(--color-bg-dark);
+  transform: translateY(-3px) scale(1.1);
+  border-color: transparent;
+}
 #list .card .card-buttons button:hover .material-icons {
   transform: scale(1.1) rotate(15deg);
 }
 
 #list .card .btn-cart:hover { 
-  background-image: var(--gradient-success-hover); 
-  box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+  background-color: var(--color-green); 
+  box-shadow: var(--glow-green-md);
 }
 #list .card .btn-edit:hover { 
-  background-image: var(--gradient-edit-hover); 
-  box-shadow: 0 5px 15px rgba(255, 193, 7, 0.4);
+  background-color: var(--color-yellow); 
+  box-shadow: var(--glow-yellow-md);
 }
 #list .card .btn-delete:hover { 
-  background-image: var(--gradient-delete-hover); 
-  box-shadow: 0 5px 15px rgba(220, 53, 69, 0.4);
+  background-color: var(--color-magenta); 
+  box-shadow: var(--glow-magenta-md);
 }
-/* (NUEVO) Animación distinta para borrar (shake) */
 #list .card .btn-delete:hover .material-icons {
   animation: shake-icon 0.5s;
 }
@@ -416,26 +422,28 @@ main > div.active {
   100% { transform: scale(1.1) rotate(0deg); }
 }
 
-
-/* --- 6. Estilos del Formulario --- */
+/* --- 6. Formulario "Glassmorphism" --- */
 #form h3 {
   text-align: left;
-  border-bottom: 3px solid var(--color-primary);
+  border-bottom: 3px solid var(--color-cyan);
   padding-bottom: 0.75rem;
-  color: var(--color-primary-dark);
+  color: var(--color-text-light);
   font-size: 2em;
   font-weight: 700;
+  text-shadow: var(--glow-cyan-xs);
 }
 
 #bookForm {
-  background-color: var(--color-surface);
-  border: 1px solid transparent;
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-glass);
   border-radius: var(--border-radius-md);
   padding: 2.5rem;
   text-align: left;
   max-width: 700px;
   margin: 1.5rem auto;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 0 35px rgba(0, 242, 234, 0.15);
 }
 
 #bookForm div {
@@ -446,7 +454,7 @@ main > div.active {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  color: var(--color-primary-dark);
+  color: var(--color-text-light);
 }
 
 #bookForm input[type="text"],
@@ -456,23 +464,29 @@ main > div.active {
 #bookForm textarea {
   width: 100%;
   padding: 0.85rem 1rem;
-  border: 2px solid var(--color-bg-dark);
+  border: 2px solid var(--border-glass);
   border-radius: var(--border-radius-md);
   box-sizing: border-box;
   font-size: 1em;
   font-family: 'Poppins', sans-serif;
   transition: var(--transition-fast);
-  background-color: var(--color-bg-light);
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-light);
+}
+#bookForm input::placeholder,
+#bookForm textarea::placeholder {
+  color: var(--color-text-muted);
 }
 
 /* Efecto de foco "Glow" */
 #bookForm input:focus,
 #bookForm select:focus,
 #bookForm textarea:focus {
-  border-color: var(--color-secondary);
+  border-color: var(--color-cyan);
   background-color: var(--color-surface);
   outline: 0;
-  box-shadow: 0 0 0 4px rgba(0, 153, 204, 0.2);
+  box-shadow: var(--glow-cyan-md);
+  color: var(--color-text);
 }
 
 #bookForm input:invalid,
@@ -481,32 +495,77 @@ main > div.active {
 }
 #bookForm input:invalid:focus,
 #bookForm select:invalid:focus {
-  box-shadow: 0 0 0 4px rgba(220, 53, 69, 0.2);
+  box-shadow: var(--glow-error-md);
 }
 
+
+/* * -----------------------------------------------------------------
+ * ¡AQUÍ ESTÁ LA MODIFICACIÓN PARA "NUEVO, BUENO, MALO"!
+ * -----------------------------------------------------------------
+ */
 #bookForm .radio-group div {
   display: flex;
-  gap: 1.5rem;
   margin-top: 0.75rem;
+  border-radius: var(--border-radius-md);
+  overflow: hidden; /* Para redondear las esquinas del grupo */
+  border: 2px solid var(--border-glass);
+  box-shadow: 0 0 10px rgba(0, 242, 234, 0.1);
 }
-#bookForm .radio-group div label {
-  font-weight: 500;
-  color: var(--color-text);
-  margin-left: 0.35rem;
-  cursor: pointer;
-}
+
+/* Ocultamos el radio button real */
 #bookForm .radio-group div input {
-  width: auto;
-  transform: scale(1.3);
-  accent-color: var(--color-primary);
-  cursor: pointer;
+  display: none; 
 }
+
+#bookForm .radio-group div label {
+  flex-grow: 1; /* Cada opción ocupa el mismo espacio */
+  text-align: center;
+  padding: 0.75rem 0.5rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  border-right: 2px solid var(--border-glass);
+  margin-bottom: 0; /* Reseteamos el margen de la label */
+  margin-left: 0; /* Reseteamos el margen de la label */
+}
+
+#bookForm .radio-group div label:last-of-type {
+   border-right: none; /* Sin borde en el último */
+}
+
+#bookForm .radio-group div label:hover {
+  background-color: rgba(0, 242, 234, 0.1);
+  color: var(--color-cyan);
+}
+
+/* ¡El estilo "seleccionado"! */
+#bookForm .radio-group div input:checked + label {
+  color: var(--color-bg-dark);
+  text-shadow: none;
+}
+
+/* Damos color a los otros estados */
+#bookForm .radio-group div input[value="new"]:checked + label {
+   background-color: var(--color-green);
+   box-shadow: var(--glow-green-md);
+}
+#bookForm .radio-group div input[value="good"]:checked + label {
+   background-color: var(--color-cyan);
+   box-shadow: var(--glow-cyan-md);
+}
+#bookForm .radio-group div input[value="bad"]:checked + label {
+   background-color: var(--color-magenta);
+   box-shadow: var(--glow-magenta-md);
+}
+/* ----------------------------------------------------------------- */
+
 
 #bookForm .form-buttons {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  border-top: 1px solid var(--color-bg-dark);
+  border-top: 1px solid var(--border-glass);
   padding-top: 1.5rem;
   margin-top: 2rem;
 }
@@ -516,41 +575,39 @@ main > div.active {
   font-size: 1em;
   font-weight: 600;
   border-radius: var(--border-radius-md);
+  transition: var(--transition-smooth);
 }
 
 #bookForm .form-buttons button[type="submit"] {
-  background-image: var(--gradient-submit);
+  background-image: linear-gradient(90deg, var(--color-magenta) 0%, var(--color-cyan) 100%);
   background-size: 200% auto;
   color: white;
   border: none;
-  transition: var(--transition-smooth);
-  /* (NUEVO) Animación de pulso */
-  animation: pulse-glow 2.5s infinite ease-in-out;
+  animation: pulse-glow-intense 2s infinite;
 }
 #bookForm .form-buttons button[type="submit"]:hover {
-  background-position: right center; /* Cambia el gradiente en hover */
-  box-shadow: 0 5px 15px rgba(0, 153, 204, 0.3);
-  transform: translateY(-2px);
-  animation-play-state: paused; /* Pausa el pulso en hover */
+  background-position: right center;
+  box-shadow: 0 0 35px var(--color-cyan);
+  transform: translateY(-3px) scale(1.03);
+  animation-play-state: paused;
 }
 
-/* (NUEVO) Keyframes para el pulso */
-@keyframes pulse-glow {
-  0% { box-shadow: 0 0 5px rgba(0, 153, 204, 0.3); }
-  50% { box-shadow: 0 0 20px rgba(0, 153, 204, 0.7); }
-  100% { box-shadow: 0 0 5px rgba(0, 153, 204, 0.3); }
+/* Animación de pulso más intensa */
+@keyframes pulse-glow-intense {
+  0% { box-shadow: 0 0 10px var(--color-magenta); }
+  50% { box-shadow: 0 0 30px var(--color-cyan); }
+  100% { box-shadow: 0 0 10px var(--color-magenta); }
 }
-
 
 #bookForm .form-buttons button[type="reset"] {
   background-color: transparent;
   color: var(--color-text-muted);
-  border: 2px solid var(--color-bg-dark);
+  border: 2px solid var(--border-glass);
 }
 #bookForm .form-buttons button[type="reset"]:hover {
-  background-color: var(--color-bg-dark);
-  border-color: var(--color-bg-dark);
-  color: var(--color-text);
+  background-color: var(--color-surface);
+  border-color: var(--color-text-muted);
+  color: var(--color-text-light);
 }
 
 .form-error {
@@ -559,22 +616,22 @@ main > div.active {
   font-size: 0.9em;
   font-weight: 600;
   margin-top: 0.5rem;
-  animation: shake 0.3s;
+  text-shadow: 0 0 5px var(--color-error);
+  animation: shake-error 0.4s;
 }
 
-/* Animación de error */
-@keyframes shake {
+@keyframes shake-error {
   0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
 }
 
-/* --- 7. Notificaciones y Mensajes --- */
+/* --- 7. Notificaciones --- */
 #messages {
   position: fixed;
-  top: calc(1.5rem + 70px); /* (NUEVO) Debajo del header sticky */
+  top: calc(1.5rem + 70px); /* Debajo del header sticky */
   right: 1.5rem;
-  z-index: 999; /* Debajo del header */
+  z-index: 99;
   width: 90%;
   max-width: 380px;
   display: flex;
@@ -585,55 +642,117 @@ main > div.active {
 #messages .alert {
   padding: 1.25rem 1.5rem;
   border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-md);
-  border: 1px solid transparent;
+  border: 1px solid var(--border-glass);
   border-left-width: 6px;
+  background: var(--bg-glass);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-weight: 500;
-  animation: slideInRight 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  animation: slideInRight 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 #messages .alert .btn-close {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  line-height: 1;
-  color: inherit;
-  opacity: 0.7;
-  padding: 0 0 0 1.5rem;
+  background: none; border: none; font-size: 1.5rem; line-height: 1;
+  color: inherit; opacity: 0.7; padding: 0 0 0 1.5rem;
 }
-#messages .alert .btn-close:hover {
-  opacity: 1;
-  transform: scale(1.1);
-}
+#messages .alert .btn-close:hover { opacity: 1; transform: scale(1.1); }
 
 #messages .alert-info {
-  background-color: #e6f7ff;
-  color: var(--color-primary-dark);
-  border-color: var(--color-primary);
+  color: var(--color-cyan);
+  border-left-color: var(--color-cyan);
+  text-shadow: var(--glow-cyan-xs);
 }
-
 #messages .alert-danger {
-  background-color: #f8d7da;
   color: var(--color-error);
-  border-color: #f5c6cb;
   border-left-color: var(--color-error);
+  text-shadow: 0 0 5px var(--color-error);
 }
 
 @keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(100%); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
-/* --- 8. (NUEVO) Scrollbar Personalizada --- */
+/* --- 8. Footer "Joan Brotons" (Centrado y con Estilo) --- */
+footer {
+  width: 100%;
+  padding: 4rem 2rem; /* Más espaciado */
+  margin-top: 4rem; /* Separación del contenido */
+  background-color: transparent; /* Fondo transparente */
+  color: var(--color-text-muted);
+  text-align: center; /* ¡¡AQUÍ SE CENTRA!! */
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+  
+  /* Reflejo en el "suelo" */
+  -webkit-box-reflect: below 0px linear-gradient(to bottom, transparent 70%, rgba(10, 12, 16, 0.3));
+}
+
+/* Línea de neón superior */
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 2px;
+  max-width: 600px;
+  background-color: var(--color-cyan);
+  box-shadow: var(--glow-cyan-lg);
+  animation: pulse-glow-intense 3s infinite alternate;
+}
+
+footer p {
+  font-family: 'Poppins', sans-serif; /* Aseguramos la fuente */
+  font-size: 2.25em; /* Más grande */
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  
+  /* Texto con Gradiente Animado (usando la animación de los botones) */
+  background-image: linear-gradient(90deg, var(--color-magenta) 0%, var(--color-cyan) 100%);
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  
+  /* Animación de pulso + glitch */
+  animation: pulse-glow-intense 3s infinite, glitch-text-footer 5s infinite linear alternate-reverse;
+}
+
+/* (NUEVO KEYFRAME para el footer) */
+@keyframes glitch-text-footer {
+  0% {
+    transform: translate(0);
+    text-shadow: 0 0 5px var(--color-cyan), 0 0 15px var(--color-magenta);
+  }
+  2% {
+    transform: translate(2px, -2px);
+    text-shadow: 0 0 5px var(--color-magenta), 0 0 15px var(--color-cyan);
+  }
+  4% {
+    transform: translate(-2px, 2px);
+    text-shadow: 0 0 5px var(--color-cyan), 0 0 15px var(--color-magenta);
+  }
+  6% {
+    transform: translate(0, 0);
+    text-shadow: 0 0 5px var(--color-cyan), 0 0 15px var(--color-magenta);
+  }
+  100% {
+    transform: translate(0);
+    text-shadow: 0 0 5px var(--color-cyan), 0 0 15px var(--color-magenta);
+  }
+}
+/* --- FIN DEL FOOTER --- */
+
+
+/* --- 9. Scrollbar Neón --- */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -643,75 +762,50 @@ main > div.active {
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-secondary);
+  background: var(--color-cyan);
   border-radius: 10px;
   border: 2px solid var(--color-bg-dark);
+  box-shadow: var(--glow-cyan-md);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-primary);
+  background: var(--color-magenta);
+  box-shadow: var(--glow-magenta-md);
 }
 
-
-/* --- 9. Responsive --- */
+/* --- 10. Responsive --- */
 @media (max-width: 900px) {
   header {
     flex-direction: column;
     gap: 1.5rem;
     padding: 1.5rem;
-    position: static; /* Quitamos el sticky en móvil, puede ser molesto */
+    position: static;
   }
-  
-  nav ul {
-    width: 100%;
-    justify-content: center;
-  }
-  
-  main {
-    padding: 1.5rem;
-  }
-
-  #messages {
-    top: 1.5rem; /* Volvemos a ponerlo arriba del todo */
-  }
+  nav ul { width: 100%; justify-content: center; }
+  main { padding: 1.5rem; }
+  #messages { top: 1.5rem; }
 }
 
 @media (max-width: 480px) {
-  body {
-    font-size: 14px;
-  }
-
-  main {
-    padding: 1rem;
-  }
-  
-  header {
-    padding: 1rem;
-  }
-
-  .header-brand {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  header h1 {
-    font-size: 1.75em;
-  }
-  
-  nav li a {
-    padding: 0.5rem 0.75rem;
-  }
-
-  #bookForm {
-    padding: 1.5rem;
-  }
-
-  #form h3 {
-    font-size: 1.5em;
-  }
-
+  body { font-size: 14px; }
+  main { padding: 1rem; }
+  header { padding: 1rem; }
+  .header-brand { flex-direction: column; text-align: center; }
+  header h1 { font-size: 1.75em; }
+  nav li a { padding: 0.5rem 0.75rem; }
+  #bookForm { padding: 1.5rem; }
+  #form h3 { font-size: 1.5em; }
   #messages {
-    top: 0.5rem;
-    right: 0.5rem;
-    width: calc(100% - 1rem);
+    top: 0.5rem; right: 0.5rem; width: calc(100% - 1rem);
+  }
+  /* (NUEVO) Ajuste responsive para los botones de radio */
+  #bookForm .radio-group div {
+    flex-direction: column; /* Los apila en vertical en pantallas muy pequeñas */
+    border: none;
+    box-shadow: none;
+    gap: 0.5rem;
+  }
+  #bookForm .radio-group div label {
+    border: 2px solid var(--border-glass);
+    border-radius: var(--border-radius-md);
   }
 }

@@ -2274,14 +2274,14 @@
       "userId": 2
     },
     {
-      "id": "efc5",
-      "moduleCode": "0014",
-      "publisher": "McGraw-Hill",
-      "price": 4,
-      "pages": 4,
-      "status": "new",
-      "soldDate": "2025-10-29",
-      "comments": "adios",
+      "id": "02dc",
+      "moduleCode": "0011",
+      "publisher": "Espiga",
+      "price": 25,
+      "pages": 500,
+      "status": "bad",
+      "soldDate": "2025-10-31",
+      "comments": "Molt malo",
       "userId": 2
     }
   ]
