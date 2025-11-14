@@ -9,7 +9,6 @@ export default class Controller {
     this.books = new Books();
     this.modules = new Modules();
     this.cart = new Cart(); 
-    // Hardcodeado según el ejercicio (usado en handleSubmit y ahora en validación)
     this.currentUserId = 2; 
   }
 
@@ -18,7 +17,7 @@ export default class Controller {
       await Promise.all([
           this.modules.populate(), 
           this.books.populate(),
-          this.cart.populate() 
+          this.cart.populate() // (MODIFICADO) Carga el carrito desde LocalStorage
       ]);
       this.view.renderModules(this.modules.data);
       this.view.renderBooks(this.books.data, this.modules);
@@ -27,20 +26,26 @@ export default class Controller {
       // 1. Asigna el manejador para el submit del formulario (Añadir/Editar)
       this.view.setBookSubmitHandler(this.handleSubmitForm.bind(this));
       
-      // 2. (NUEVO) Asigna el manejador para el cambio en el select de módulo
+      // 2. Asigna el manejador para el cambio en el select de módulo
       this.view.bindModuleSelectChange(this.handleModuleChange.bind(this));
       
-      // 3. Asigna los manejadores para los botones de las tarjetas
+      // 3. Asigna los manejadores para los botones de las tarjetas (#list)
       this.view.bindBookListEvents(
           this.handleAddToCart.bind(this), 
           this.handleEditBook.bind(this), 
-          this.handleRemoveBook.bind(this) // Este es tu "borrar"
+          this.handleRemoveBook.bind(this)
+      );
+      
+      // 4. (NUEVO) Asigna los manejadores para los botones de la vista (#cart)
+      this.view.bindCartEvents(
+          this.handleRemoveFromCart.bind(this),
+          this.handlePurchase.bind(this),
+          this.handleEmptyCart.bind(this)
       );
 
+
       // --- INICIALIZAR EL ROUTER (SPA) ---
-      // Escucha futuros cambios de hash (clics en navegación)
       window.addEventListener('hashchange', this._handleHashChange.bind(this));
-      // Llama una vez al inicio para establecer la pestaña correcta al cargar
       this._handleHashChange(); 
 
     } catch (error) {
@@ -52,14 +57,6 @@ export default class Controller {
    * Maneja el envío del formulario, tanto para añadir como para editar.
    */
   async handleSubmitForm(payload) {
-    
-    // --- VALIDACIÓN AÑADIDA ---
-    // La validación de campos vacíos y la de módulo duplicado
-    // ahora se gestionan en la vista (`_validateForm`),
-    // que se llama ANTES de que el controlador reciba el payload.
-    // Así que aquí ya no es necesaria la comprobación manual.
-    // --- FIN DE LA VALIDACIÓN ---
-
     const bookId = payload.id; 
 
     try {
@@ -67,7 +64,7 @@ export default class Controller {
         ...payload,
         price: parseFloat(payload.price) || 0,
         pages: parseInt(payload.pages, 10) || 0,
-        userId: this.currentUserId, // Usamos el ID de usuario hardcodeado
+        userId: this.currentUserId,
         soldDate: payload.soldDate || "", 
       };
       
@@ -85,8 +82,6 @@ export default class Controller {
         this.view.showMessage("info", "Libro añadido con éxito");
       }
       
-      // ¡¡AQUÍ ESTÁ LA LÍNEA QUE HACE EL RESET!!
-      // Se llama después de Añadir y después de Editar.
       this.view.resetForm(); 
 
     } catch (error) {
@@ -95,7 +90,7 @@ export default class Controller {
   }
 
   /**
-   * Maneja el clic en el icono de eliminar (borrar) libro.
+   * Maneja el clic en el icono de eliminar (borrar) libro de #list.
    */
   async handleRemoveBook(id) {
     try {
@@ -118,21 +113,26 @@ export default class Controller {
   }
 
   /**
-   * AÑADIDO: Maneja el clic en el icono de añadir al carrito.
+   * (MODIFICADO) Maneja el clic en el icono de añadir al carrito.
    */
   handleAddToCart(id) {
     try {
         const book = this.books.getBookById(id);
-        this.cart.addItem(book); 
+        this.cart.addItem(book); // Esto ya guarda en LocalStorage
         const moduleName = this.modules.getModuleByCode(book.moduleCode)?.cliteral || book.moduleCode;
         this.view.showMessage("info", `Libro "${moduleName}" (ID: ${id}) añadido al carrito.`);
+
+        // (NUEVO) Re-renderizar el carrito si está visible
+        if (window.location.hash === '#cart') {
+            this.view.renderCart(this.cart.data, this.modules);
+        }
     } catch (error) {
         this.view.showMessage("error", `${error.message}`);
     }
   }
 
   /**
-   * AÑADIDO: Maneja el clic en el icono de editar libro.
+   * Maneja el clic en el icono de editar libro.
    */
   handleEditBook(id) {
     try {
@@ -145,54 +145,78 @@ export default class Controller {
   }
   
   /**
-   * (NUEVO) Maneja el cambio en el select de módulos para validar duplicados
+   * Maneja el cambio en el select de módulos para validar duplicados
    */
   async handleModuleChange(moduleCode) {
-    // 1. Limpiamos siempre la validación custom anterior
     this.view.setModuleSelectValidity("");
   
-    // 2. Si eligen "Selecciona..." (valor vacío), no hay nada que validar.
     if (!moduleCode) {
-      this.view.validateModuleField(); // Esto limpiará el span de error
+      this.view.validateModuleField(); 
       return;
     }
   
-    // 3. Esta validación SÓLO se aplica al AÑADIR, no al EDITAR.
-    // Si el campo ID tiene un valor, estamos editando.
     const isEditing = this.view.idInput && this.view.idInput.value;
     if (isEditing) {
-      this.view.validateModuleField(); // Limpia por si acaso
+      this.view.validateModuleField(); 
       return;
     }
   
-    // 4. Estamos AÑADIENDO. Comprobamos si ya existe.
     try {
       const exists = await this.books.bookExists(this.currentUserId, moduleCode);
-      
       if (exists) {
-        // Si existe, ponemos el error personalizado
         this.view.setModuleSelectValidity("Ya tienes un libro a la venta para este módulo.");
       }
-      // Si no existe, la validez (vacía) ya está puesta desde el paso 1.
-    
     } catch (error) {
-      // Si la API falla, no bloqueamos al usuario, pero mostramos un error.
       this.view.showMessage("error", `Error al comprobar el módulo: ${error.message}`);
-      // Dejamos la validez custom vacía para que pueda continuar
       this.view.setModuleSelectValidity(""); 
     }
   
-    // 5. Le decimos a la vista que actualice el estado visual de ESE campo
     this.view.validateModuleField();
   }
-  
+
+  // --- (NUEVOS) MANEJADORES PARA EL CARRITO ---
+
   /**
-   * (NUEVO) Maneja el cambio de hash para la navegación SPA
+   * (NUEVO) Maneja el clic en el botón "Eliminar del carrito" en la vista #cart
+   */
+  async handleRemoveFromCart(id) {
+    try {
+        this.cart.removeItem(id); // Esto ya guarda en LocalStorage
+        this.view.removeCartItem(id); // Elimina solo la tarjeta de la vista
+        this.view.showMessage("info", "Libro eliminado del carrito.");
+    } catch (error) {
+        this.view.showMessage("error", `Error al eliminar del carrito: ${error.message}`);
+    }
+  }
+
+  /**
+   * (NUEVO) Maneja el clic en "Realizar la compra"
+   */
+  async handlePurchase() {
+    // Simulación: Mostrar mensaje y vaciar carrito
+    this.cart.emptyCart(); // Vacía el modelo y guarda en LocalStorage
+    this.view.renderCart(this.cart.data, this.modules); // Re-renderiza (ahora vacío)
+    this.view.showMessage("info", "Compra realizada con éxito. (Simulación)");
+  }
+
+  /**
+   * (NUEVO) Maneja el clic en "Vaciar carrito"
+   */
+  async handleEmptyCart() {
+    // Pedir confirmación
+    if (confirm("¿Estás seguro de que quieres vaciar el carrito?")) {
+        this.cart.emptyCart(); // Vacía el modelo y guarda en LocalStorage
+        this.view.renderCart(this.cart.data, this.modules); // Re-renderiza (vacío)
+        this.view.showMessage("info", "Carrito vaciado.");
+    }
+  }
+
+
+  /**
+   * (MODIFICADO) Maneja el cambio de hash para la navegación SPA
    * @private
    */
   _handleHashChange() {
-    // Obtiene el hash (ej. "#form"), quita el '#'
-    // Si está vacío (ej. "index.html"), usa 'list' por defecto.
     const targetId = window.location.hash.substring(1) || 'list';
   
     // 1. Usa la función de la Vista para mostrar la pestaña correcta
@@ -200,9 +224,14 @@ export default class Controller {
       this.view.showTab(targetId);
     }
   
-    // 2. Si vamos al formulario, lo reseteamos (requisito del ejercicio)
+    // 2. Si vamos al formulario, lo reseteamos
     if (targetId === 'form' && this.view && typeof this.view.resetForm === 'function') {
       this.view.resetForm();
+    }
+    
+    // 3. (NUEVO) Si vamos al carrito, lo (re)renderizamos
+    if (targetId === 'cart' && this.view && typeof this.view.renderCart === 'function') {
+        this.view.renderCart(this.cart.data, this.modules);
     }
   }
 }

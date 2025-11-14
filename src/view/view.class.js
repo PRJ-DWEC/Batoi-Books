@@ -6,13 +6,16 @@ export default class View {
     this.bookForm = document.getElementById("bookForm");
     this.about = document.getElementById("about");
     this.moduleSelect = document.getElementById("moduleCode");
+    
+    // (NUEVO) Referencia a la sección del carrito
+    this.cartSection = document.getElementById("cart");
 
     // Elementos del formulario para Editar/Añadir
     this.formTitle = document.getElementById("formTitle");
     this.idInputDiv = document.getElementById("id-div");
     this.idInput = document.getElementById("id");
 
-    // (NUEVO) Referencias a los spans de error
+    // Referencias a los spans de error
     this.errors = {
       moduleCode: document.getElementById("moduleCode-error"),
       publisher: document.getElementById("publisher-error"),
@@ -29,27 +32,22 @@ export default class View {
         this.resetForm();
     });
     
-    // (NUEVO) Callback para el listener del select
     this._handleModuleChangeCallback = null;
   }
 
   /**
-   * (MODIFICADO) Prepara la función showTab para que el controlador
+   * Prepara la función showTab para que el controlador
    * la use cuando cambie el hash.
    */
   setupNavigation() {
     const mainSections = document.querySelectorAll("main > div");
     
     // Función para cambiar de pestaña.
-    // El controlador la llamará cuando cambie el hash.
     this.showTab = (targetId) => {
        mainSections.forEach((section) => {
           section.classList.toggle("active", section.id === targetId);
        });
     }
-    
-    // Ya no añadimos listeners de clic a la navegación aquí.
-    // El evento 'hashchange' global lo gestionará el controlador.
   }
 
   renderModules(modules) {
@@ -82,6 +80,24 @@ export default class View {
       </div>
     `;
   }
+  
+  // (NUEVO) Plantilla para la tarjeta del carrito (solo botón eliminar)
+  _createCartCardHTML(book, moduleCliteral) {
+     return `
+      <img src="${book.photo || "https://via.placeholder.com/100x150?text=IMG"}" alt="Libro: ${book.id}">
+      <div>
+        <h3>${moduleCliteral} (${book.id})</h3>
+        <h4>${book.publisher}</h4>
+        <p>${book.pages} páginas</p>
+        <p>Estado: ${book.status}</p>
+        <h4>${parseFloat(book.price).toFixed(2)} €</h4>
+      </div>
+      <div class="card-buttons">
+        <button class="btn-delete-cart" title="Eliminar del carrito"><span class="material-icons">remove_shopping_cart</span></button>
+      </div>
+    `;
+  }
+
 
   renderBook(book, modules) {
     let moduleCliteral = book.moduleCode;
@@ -126,6 +142,54 @@ export default class View {
     this.bookList.innerHTML = ""; 
     books.forEach((book) => this.renderBook(book, modules));
   }
+  
+  // (NUEVO) Renderiza la vista completa del carrito
+  renderCart(cartData, modules) {
+    if (!this.cartSection) return;
+
+    // 1. Limpiar vista anterior
+    this.cartSection.innerHTML = "";
+    
+    // 2. Crear el contenedor de la lista (para que se parezca al #list)
+    const cartList = document.createElement('div');
+    cartList.className = 'cart-list-container'; // Estilo similar a #list
+
+    if (cartData.length === 0) {
+        cartList.innerHTML = '<p>El carrito está vacío.</p>';
+    } else {
+        cartData.forEach(book => {
+            let moduleCliteral = book.moduleCode;
+            try {
+                const module = modules.getModuleByCode(book.moduleCode);
+                moduleCliteral = module.cliteral;
+            } catch (e) {
+                console.warn(`Módulo ${book.moduleCode} no encontrado para libro ${book.id}`);
+            }
+            
+            const bookCard = document.createElement("div");
+            bookCard.className = "card"; // Reutilizamos el estilo de tarjeta
+            bookCard.dataset.id = book.id; 
+            bookCard.innerHTML = this._createCartCardHTML(book, moduleCliteral);
+            cartList.appendChild(bookCard);
+        });
+    }
+    this.cartSection.appendChild(cartList);
+
+    // 3. Añadir botones de acción del carrito
+    const cartActions = document.createElement('div');
+    cartActions.className = 'cart-actions';
+    cartActions.innerHTML = `
+        <button id="btn-purchase" class="btn-action-primary">Realizar la compra</button>
+        <button id="btn-empty-cart" class="btn-action-secondary">Vaciar carrito</button>
+    `;
+    // Deshabilitar botones si el carrito está vacío
+    if (cartData.length === 0) {
+        cartActions.querySelector('#btn-purchase').disabled = true;
+        cartActions.querySelector('#btn-empty-cart').disabled = true;
+    }
+    this.cartSection.appendChild(cartActions);
+  }
+
 
   removeBook(bookId) {
     const bookElement = this.bookList?.querySelector(`div.card[data-id="${bookId}"]`);
@@ -133,6 +197,26 @@ export default class View {
       bookElement.remove();
     }
   }
+
+  // (NUEVO) Elimina un item de la vista del carrito
+  removeCartItem(bookId) {
+    const bookElement = this.cartSection?.querySelector(`div.card[data-id="${bookId}"]`);
+    if (bookElement) {
+      bookElement.remove();
+    }
+    // Actualizar estado de botones si el carrito queda vacío
+    const remainingItems = this.cartSection.querySelectorAll('div.card').length;
+    if (remainingItems === 0) {
+        const btnPurchase = this.cartSection.querySelector('#btn-purchase');
+        const btnEmpty = this.cartSection.querySelector('#btn-empty-cart');
+        const listContainer = this.cartSection.querySelector('.cart-list-container');
+        
+        if(btnPurchase) btnPurchase.disabled = true;
+        if(btnEmpty) btnEmpty.disabled = true;
+        if(listContainer) listContainer.innerHTML = '<p>El carrito está vacío.</p>';
+    }
+  }
+
 
   showMessage(type, message) {
     if (!this.messages) return;
@@ -159,18 +243,11 @@ export default class View {
   _handleEditClick = null;
   _handleDeleteClick = null;
 
-  // --- MÉTODOS DE VALIDACIÓN PERSONALIZADOS ---
-
-  /**
-   * (MODIFICADO) Limpia los mensajes de error globales Y los spans
-   */
   _clearMessages() {
     if (this.messages) {
-      // Limpia solo los mensajes de error globales
       const errorMessages = this.messages.querySelectorAll('._error');
       errorMessages.forEach(msg => msg.remove());
     }
-    // (NUEVO) Limpiar también los spans de error de cada campo
     if (this.errors) {
       Object.values(this.errors).forEach(span => {
         if (span) span.textContent = '';
@@ -178,61 +255,43 @@ export default class View {
     }
   }
 
-  /**
-   * (MODIFICADO) Valida el formulario manualmente y muestra errores en los spans.
-   * @returns {boolean} - True si el formulario es válido, false si no.
-   */
   _validateForm() {
     this._clearMessages();
     let isValid = true;
     
-    // Accedemos a los campos del formulario
     const moduleCode = this.bookForm.moduleCode;
     const publisher = this.bookForm.publisher;
     const price = this.bookForm.price;
     const pages = this.bookForm.pages;
     const status = this.bookForm.querySelector('input[name="status"]');
 
-    // 1. Validar Módulo (requerido + validación custom)
     if (!moduleCode.validity.valid) {
       isValid = false;
       if(this.errors.moduleCode) this.errors.moduleCode.textContent = moduleCode.validationMessage;
     }
-
-    // 2. Validar Editorial (requerido, minlength)
     if (!publisher.validity.valid) {
       isValid = false;
       if(this.errors.publisher) this.errors.publisher.textContent = publisher.validationMessage;
     }
-
-    // 3. Validar Precio (requerido, numérico, min: 0)
     if (!price.validity.valid) {
       isValid = false;
       if(this.errors.price) this.errors.price.textContent = price.validationMessage;
     }
-
-    // 4. Validar Páginas (requerido, numérico, min: 0, entero)
     if (!pages.validity.valid) {
       isValid = false;
       if(this.errors.pages) this.errors.pages.textContent = pages.validationMessage;
     }
-
-    // 5. Validar Estado (requerido)
     if (status && !status.validity.valid) {
       isValid = false;
-      // Usamos el validationMessage del primer radio (todos tienen 'required')
       if(this.errors.status) this.errors.status.textContent = status.validationMessage;
     }
 
-    // (Opcional) Mostrar un mensaje genérico arriba si hay errores
     if (!isValid) {
       this.showMessage('error', 'Por favor, corrige los errores indicados en el formulario.');
     }
 
     return isValid;
   }
-
-  // --- FIN DE MÉTODOS DE VALIDACIÓN ---
 
   setBookSubmitHandler(callback) {
     if (!this.bookForm) return;
@@ -243,14 +302,9 @@ export default class View {
     this._handleSubmitCallback = (event) => {
         event.preventDefault(); 
         
-        // 1. (MODIFICADO) Llamamos a nuestra validación manual
         if (!this._validateForm()) {
-          // Si no es válido, detenemos la ejecución.
-          // Los errores ya se han mostrado.
           return;
         }
-        
-        // --- El formulario es válido, continuamos ---
         
         if (this.idInput) this.idInput.disabled = false;
         
@@ -265,50 +319,33 @@ export default class View {
     this.bookForm.addEventListener("submit", this._handleSubmitCallback);
   }
   
-  /**
-   * (MODIFICADO) Resetea el formulario manualmente y limpia errores
-   */
   resetForm() {
-    // 1. Borra los campos manualmente
     this.bookForm.publisher.value = '';
     this.bookForm.price.value = '';
     this.bookForm.pages.value = '';
     this.bookForm.comments.value = '';
     this.bookForm.soldDate.value = '';
-    this.bookForm.moduleCode.value = ''; // Resetea el select
+    this.bookForm.moduleCode.value = ''; 
     
-    // (NUEVO) Limpia el error de validación personalizado
     this.setModuleSelectValidity("");
     
-    // 2. Resetea el radio button al valor por defecto ('good')
     const defaultRadio = this.bookForm.querySelector('input[name="status"][value="good"]');
     if (defaultRadio) {
         defaultRadio.checked = true;
     }
     
-    // 3. Restaura el título
     if (this.formTitle) this.formTitle.textContent = 'Añadir libro';
-    
-    // 4. Oculta el campo ID
     if (this.idInputDiv) this.idInputDiv.style.display = 'none'; 
-    
-    // 5. Limpia y habilita el ID
     if (this.idInput) {
       this.idInput.value = ''; 
       this.idInput.disabled = false; 
     }
-
-    // 6. (MODIFICADO) Limpia los mensajes de error globales Y los spans
     this._clearMessages();
   }
   
-  /**
-   * (NUEVO) Rellena el formulario para editar un libro
-   */
   populateFormForEdit(book) {
     if (!this.bookForm) return;
     
-    // Limpiamos errores anteriores (incluido el de módulo duplicado)
     this.setModuleSelectValidity("");
     this._clearMessages();
 
@@ -333,49 +370,28 @@ export default class View {
     this.form.scrollIntoView({ behavior: 'smooth' });
   }
 
-  // --- (NUEVOS) MÉTODOS PARA VALIDACIÓN DE MÓDULO ---
-
-  /**
-   * (NUEVO) Establece el mensaje de validación personalizado en el select
-   */
   setModuleSelectValidity(message) {
     if (this.moduleSelect) {
       this.moduleSelect.setCustomValidity(message);
     }
   }
 
-  /**
-   * (NUEVO) Actualiza el span de error del módulo inmediatamente
-   */
   validateModuleField() {
     if (!this.moduleSelect || !this.errors.moduleCode) return;
-  
-    // Limpiamos el error primero
     this.errors.moduleCode.textContent = '';
-  
-    // Comprobamos la validez (que incluirá nuestro setCustomValidity)
     if (!this.moduleSelect.validity.valid) {
-      // Mostramos el mensaje de validación (el estándar o el nuestro)
       this.errors.moduleCode.textContent = this.moduleSelect.validationMessage;
     }
   }
 
-  /**
-   * (NUEVO) Asigna el manejador de evento 'change' al select de módulos
-   */
   bindModuleSelectChange(callback) {
     if (!this.moduleSelect) return;
-  
-    // Limpiamos listener anterior si existe
     if (this._handleModuleChangeCallback) {
       this.moduleSelect.removeEventListener('change', this._handleModuleChangeCallback);
     }
-  
     this._handleModuleChangeCallback = (event) => {
-      // Pasamos el valor (moduleCode) al controlador
       callback(event.target.value);
     };
-  
     this.moduleSelect.addEventListener('change', this._handleModuleChangeCallback);
   }
 
@@ -408,6 +424,50 @@ export default class View {
       if (this.bookList) {
         this.bookList.removeEventListener('click', this._handleBookListClick);
         this.bookList.addEventListener('click', this._handleBookListClick);
+      }
+  }
+
+  // --- (NUEVOS) MANEJADORES PARA EVENTOS DEL CARRITO ---
+
+  _handleRemoveCartItemClick = null;
+  _handlePurchaseClick = null;
+  _handleEmptyCartClick = null;
+
+  // (NUEVO) Listener centralizado para la sección #cart
+  _handleCartActionsClick = (event) => {
+    const target = event.target;
+    
+    // Botón "Eliminar" de una tarjeta
+    const removeButton = target.closest('.btn-delete-cart');
+    if (removeButton && this._handleRemoveCartItemClick) {
+        const card = target.closest('.card');
+        if (card && card.dataset.id) {
+            this._handleRemoveCartItemClick(card.dataset.id);
+        }
+        return;
+    }
+
+    // Botón "Realizar Compra"
+    if (target.id === 'btn-purchase' && this._handlePurchaseClick) {
+        this._handlePurchaseClick();
+        return;
+    }
+
+    // Botón "Vaciar Carrito"
+    if (target.id === 'btn-empty-cart' && this._handleEmptyCartClick) {
+        this._handleEmptyCartClick();
+    }
+  }
+  
+  // (NUEVO) Asigna los listeners para la vista del carrito
+  bindCartEvents(removeItemHandler, purchaseHandler, emptyCartHandler) {
+      this._handleRemoveCartItemClick = removeItemHandler;
+      this._handlePurchaseClick = purchaseHandler;
+      this._handleEmptyCartClick = emptyCartHandler;
+
+      if (this.cartSection) {
+          this.cartSection.removeEventListener('click', this._handleCartActionsClick);
+          this.cartSection.addEventListener('click', this._handleCartActionsClick);
       }
   }
 }

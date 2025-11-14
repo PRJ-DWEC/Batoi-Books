@@ -13,6 +13,7 @@ document.querySelector("#app").innerHTML = `
     <ul>
       <li><a href="#list">Ver Libros</a></li>
       <li><a href="#form">Añadir Libro</a></li>
+      <li><a href="#cart">Carrito</a></li>
       <li><a href="#about">Acerca de...</a></li>
     </ul>
   </nav>
@@ -21,7 +22,9 @@ document.querySelector("#app").innerHTML = `
 
   <main>
    
-    <div id="list"></div> <div id="form">
+    <div id="list"></div> 
+    
+    <div id="form">
       <h3 id="formTitle">Añadir libro</h3>
 
       <form id="bookForm" novalidate> 
@@ -79,6 +82,8 @@ document.querySelector("#app").innerHTML = `
       </form>
     </div>
 
+    <div id="cart">
+      </div>
     
     <div id="about">
       <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor.</p>
